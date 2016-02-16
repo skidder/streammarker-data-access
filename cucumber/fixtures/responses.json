@@ -1,0 +1,403 @@
+{
+  "sensor_1_update": {
+    "name": "Sensor XYZ",
+    "timezone_id": "Africa/Ndjamena",
+    "timezone_name": "West Africa Standard Time",
+    "location_enabled": false,
+    "longitude": 20,
+    "state": "inactive",
+    "sample_frequency": 5,
+    "latitude": 10,
+    "id": "1"
+  },
+  "query_for_hourly_readings_current_month": {
+    "sensor_id": "1",
+    "account_id": "account1",
+    "readings": [
+      {
+        "timestamp": 1447455600,
+        "measurements": [
+          {
+            "max": {
+              "value": 30,
+              "name": "soil_moisture_1",
+              "unit": "VWC"
+            },
+            "name": "soil_moisture_1",
+            "min": {
+              "value": 22,
+              "name": "soil_moisture_1",
+              "unit": "VWC"
+            }
+          }
+        ]
+      },
+      {
+        "timestamp": 1447369200,
+        "measurements": [
+          {
+            "max": {
+              "value": 28,
+              "name": "soil_moisture_1",
+              "unit": "VWC"
+            },
+            "name": "soil_moisture_1",
+            "min": {
+              "value": 24,
+              "name": "soil_moisture_1",
+              "unit": "VWC"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "latest_sensor_readings": {
+    "sensors": {
+      "1": {
+        "state": "active",
+        "measurements": [
+          {
+            "value": 22,
+            "name": "temperature",
+            "unit": "Celsius"
+          },
+          {
+            "value": 80,
+            "name": "humidity",
+            "unit": "%"
+          }
+        ],
+        "name": "Sensor X"
+      },
+      "2": {
+        "state": "active",
+        "measurements": [
+          {
+            "value": 18,
+            "name": "temperature",
+            "unit": "Celsius"
+          },
+          {
+            "value": 82,
+            "name": "humidity",
+            "unit": "%"
+          }
+        ],
+        "name": "Sensor X"
+      }
+    }
+  },
+  "query_for_readings_last_2_months": {
+    "sensor_id": "1",
+    "account_id": "account1",
+    "readings": [
+      {
+        "timestamp": 1444324049,
+        "measurements": [
+          {
+            "unit": "Celsius",
+            "name": "temperature",
+            "value": 22
+          },
+          {
+            "unit": "%",
+            "name": "humidity",
+            "value": 56
+          }
+        ]
+      },
+      {
+        "timestamp": 1444237649,
+        "measurements": [
+          {
+            "unit": "Celsius",
+            "name": "temperature",
+            "value": 24
+          },
+          {
+            "unit": "%",
+            "name": "humidity",
+            "value": 78
+          }
+        ]
+      },
+      {
+        "timestamp": 1447002449,
+        "measurements": [
+          {
+            "unit": "Celsius",
+            "name": "temperature",
+            "value": 22
+          },
+          {
+            "unit": "%",
+            "name": "humidity",
+            "value": 81
+          }
+        ]
+      },
+      {
+        "timestamp": 1446916049,
+        "measurements": [
+          {
+            "unit": "Celsius",
+            "name": "temperature",
+            "value": 24
+          },
+          {
+            "unit": "%",
+            "name": "humidity",
+            "value": 78
+          }
+        ]
+      }
+    ]
+  },
+  "query_for_readings_current_month": {
+    "sensor_id": "1",
+    "account_id": "account1",
+    "readings": [
+      {
+        "timestamp": 1447002449,
+        "measurements": [
+          {
+            "unit": "Celsius",
+            "name": "temperature",
+            "value": 22
+          },
+          {
+            "unit": "%",
+            "name": "humidity",
+            "value": 56
+          }
+        ]
+      },
+      {
+        "timestamp": 1446916049,
+        "measurements": [
+          {
+            "unit": "Celsius",
+            "name": "temperature",
+            "value": 24
+          },
+          {
+            "unit": "%",
+            "name": "humidity",
+            "value": 78
+          }
+        ]
+      }
+    ]
+  },
+  "query_for_hourly_readings_last_2_months": {
+    "sensor_id": "1",
+    "account_id": "account1",
+    "readings": [
+      {
+        "timestamp": 1444777200,
+        "measurements": [
+          {
+            "max": {
+              "value": 30,
+              "name": "soil_moisture_1",
+              "unit": "VWC"
+            },
+            "name": "soil_moisture_1",
+            "min": {
+              "value": 22,
+              "name": "soil_moisture_1",
+              "unit": "VWC"
+            }
+          }
+        ]
+      },
+      {
+        "timestamp": 1444690800,
+        "measurements": [
+          {
+            "max": {
+              "value": 28,
+              "name": "soil_moisture_1",
+              "unit": "VWC"
+            },
+            "name": "soil_moisture_1",
+            "min": {
+              "value": 24,
+              "name": "soil_moisture_1",
+              "unit": "VWC"
+            }
+          }
+        ]
+      },
+      {
+        "timestamp": 1447455600,
+        "measurements": [
+          {
+            "max": {
+              "value": 30,
+              "name": "soil_moisture_1",
+              "unit": "VWC"
+            },
+            "name": "soil_moisture_1",
+            "min": {
+              "value": 22,
+              "name": "soil_moisture_1",
+              "unit": "VWC"
+            }
+          }
+        ]
+      },
+      {
+        "timestamp": 1447369200,
+        "measurements": [
+          {
+            "max": {
+              "value": 28,
+              "name": "soil_moisture_1",
+              "unit": "VWC"
+            },
+            "name": "soil_moisture_1",
+            "min": {
+              "value": 24,
+              "name": "soil_moisture_1",
+              "unit": "VWC"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "query_for_readings_last_2_months_with_1_month_activity": {
+    "sensor_id": "1",
+    "account_id": "account1",
+    "readings": [
+      {
+        "timestamp": 1444324049,
+        "measurements": [
+          {
+            "unit": "Celsius",
+            "name": "temperature",
+            "value": 22
+          },
+          {
+            "unit": "%",
+            "name": "humidity",
+            "value": 81
+          }
+        ]
+      },
+      {
+        "timestamp": 1444237649,
+        "measurements": [
+          {
+            "unit": "Celsius",
+            "name": "temperature",
+            "value": 24
+          },
+          {
+            "unit": "%",
+            "name": "humidity",
+            "value": 78
+          }
+        ]
+      }
+    ]
+  },
+  "latest_sensor_readings_empty": {
+    "sensors": {}
+  },
+  "sensors_with_location": {
+    "sensors": [
+      {
+        "state": "active",
+        "id": "1",
+        "account_id": "account1",
+        "name": "Sensor X",
+        "sample_frequency": 1,
+        "location_enabled": true,
+        "latitude": 38.093455,
+        "longitude": -122.181369
+      }
+    ]
+  },
+  "sensors": {
+    "sensors": [
+      {
+        "state": "active",
+        "id": "1",
+        "account_id": "account1",
+        "name": "Sensor X",
+        "location_enabled": false,
+        "sample_frequency": 1
+      }
+    ]
+  },
+  "query_for_hourly_readings_last_2_months_with_1_month_activity": {
+    "sensor_id": "1",
+    "account_id": "account1",
+    "readings": [
+      {
+        "timestamp": 1444777200,
+        "measurements": [
+          {
+            "max": {
+              "unit": "VWC",
+              "name": "soil_moisture_1",
+              "value": 30
+            },
+            "name": "soil_moisture_1",
+            "min": {
+              "unit": "VWC",
+              "name": "soil_moisture_1",
+              "value": 22
+            }
+          }
+        ]
+      },
+      {
+        "timestamp": 1444690800,
+        "measurements": [
+          {
+            "max": {
+              "unit": "VWC",
+              "name": "soil_moisture_1",
+              "value": 28
+            },
+            "name": "soil_moisture_1",
+            "min": {
+              "unit": "VWC",
+              "name": "soil_moisture_1",
+              "value": 24
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "sensor_1": {
+    "name": "Sensor X",
+    "timezone_id": "America/Los_Angeles",
+    "location_enabled": true,
+    "longitude": -122.181369,
+    "timezone_name": "Pacific Standard Time",
+    "state": "active",
+    "sample_frequency": 1,
+    "latitude": 38.093454999999999,
+    "id": "1"
+  },
+  "latest_sensor_readings_no_readings": {
+    "sensors": {
+      "1": {
+        "state": "active",
+        "measurements": null,
+        "name": "Sensor X"
+      },
+      "2": {
+        "state": "active",
+        "measurements": null,
+        "name": "Sensor X"
+      }
+    }
+  }
+}

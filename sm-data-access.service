@@ -1,0 +1,12 @@
+[Unit]
+Description=StreamMarker Data Access
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=/usr/bin/docker pull urlgrey/streammarker-data-access
+ExecStart=/usr/bin/docker run --rm --name sm-data-access -p 10080:3000 -e GOOGLE_API_KEY=xxxx -e AWS_REGION=us-east-1 -e AWS_ACCESS_KEY_ID=xxxx -e AWS_SECRET_ACCESS_KEY=xxxx urlgrey/streammarker-data-access
+ExecStop=/usr/bin/docker stop sm-data-access
+
+[X-Fleet]

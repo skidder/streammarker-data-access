@@ -1,0 +1,73 @@
+{
+  "sensor_update": {
+    "name": "Sensor XYZ",
+    "longitude": 20,
+    "state": "inactive",
+    "sample_frequency": 5,
+    "latitude": 10
+  },
+  "valid_single_sensor_reading": {
+    "timestamp": 1433031540,
+    "relay_id": "53644F1C-2480-4F9B-9CBA-26D66139D221",
+    "status": "ok",
+    "sensors": [
+      {
+        "id": "D195E2B3-A1F6-407C-83F5-334FA46B5F6C",
+        "readings": [
+          {
+            "timestamp": 1433031540,
+            "measurements": [
+              {
+                "name": "temperature",
+                "value": 28.3,
+                "unit": "Celsius"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "valid_multiple_sensor_readings": {
+    "timestamp": 1433031540,
+    "relay_id": "53644F1C-2480-4F9B-9CBA-26D66139D221",
+    "status": "ok",
+    "sensors": [
+      {
+        "id": "D195E2B3-A1F6-407C-83F5-334FA46B5F6C",
+        "readings": [
+          {
+            "timestamp": 1433031540,
+            "measurements": [
+              {
+                "name": "temperature",
+                "value": 28.3,
+                "unit": "Celsius"
+              }
+            ]
+          },
+          {
+            "timestamp": 1433031541,
+            "measurements": [
+              {
+                "name": "temperature",
+                "value": 28.5,
+                "unit": "Celsius"
+              }
+            ]
+          },
+          {
+            "timestamp": 1433031542,
+            "measurements": [
+              {
+                "name": "temperature",
+                "value": 29.0,
+                "unit": "Celsius"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
