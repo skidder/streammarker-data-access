@@ -11,8 +11,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/mholt/binding"
-	"golang.org/x/net/context"
-	"googlemaps.github.io/maps"
+
+	"github.com/urlgrey/streammarker-data-access/geo"
 )
 
 const (
@@ -25,11 +25,11 @@ var (
 
 type Database struct {
 	dynamoDBService *dynamodb.DynamoDB
-	googleApiKey    string
+	geoLookup       *geo.GoogleGeoLookup
 }
 
-func NewDatabase(dynamoDBService *dynamodb.DynamoDB, googleApiKey string) *Database {
-	return &Database{dynamoDBService: dynamoDBService, googleApiKey: googleApiKey}
+func NewDatabase(dynamoDBService *dynamodb.DynamoDB, geoLookup *geo.GoogleGeoLookup) *Database {
+	return &Database{dynamoDBService: dynamoDBService, geoLookup: geoLookup}
 }
 
 // Get the amount of time to wait for a table to finish being created
@@ -207,20 +207,10 @@ func (d *Database) GetSensor(sensorId string) (sensor *Sensor, err error) {
 				sensor.Latitude, _ = strconv.ParseFloat(*resp.Item["latitude"].N, 64)
 				sensor.Longitude, _ = strconv.ParseFloat(*resp.Item["longitude"].N, 64)
 
-				// look up timezone using our friends at Google
-				c, _ := maps.NewClient(maps.WithAPIKey(d.googleApiKey))
-				r := &maps.TimezoneRequest{
-					Location: &maps.LatLng{
-						Lat: sensor.Latitude,
-						Lng: sensor.Longitude,
-					},
-					Timestamp: time.Now(),
-				}
-
-				tz_resp, e := c.Timezone(context.Background(), r)
-				if e == nil {
-					sensor.TimeZoneID = tz_resp.TimeZoneID
-					sensor.TimeZoneName = tz_resp.TimeZoneName
+				tz, err := d.geoLookup.FindTimezoneForLocation(sensor.Latitude, sensor.Longitude)
+				if err == nil {
+					sensor.TimeZoneID = tz.TimeZoneID
+					sensor.TimeZoneName = tz.TimeZoneName
 				}
 			}
 		} else {

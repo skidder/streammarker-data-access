@@ -11,6 +11,7 @@ import (
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/phyber/negroni-gzip/gzip"
+	"github.com/urlgrey/streammarker-data-access/geo"
 	"github.com/urlgrey/streammarker-data-access/handlers"
 )
 
@@ -32,7 +33,9 @@ func main() {
 	// Create external service connections
 	s := session.New()
 	dynamoDBConnection := createDynamoDBConnection(s)
-	db := dao.NewDatabase(dynamoDBConnection, os.Getenv("GOOGLE_API_KEY"))
+	geoLookup := geo.NewGoogleGeoLookup(os.Getenv("GOOGLE_API_KEY"))
+	geoLookup.Init()
+	db := dao.NewDatabase(dynamoDBConnection, geoLookup)
 
 	// Initialize HTTP service handlers
 	router := mux.NewRouter()
