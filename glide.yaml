@@ -29,6 +29,8 @@ import:
   version: 195180cfebf7362bd243a52477697895128c8777
   subpackages:
   - context
+- package: github.com/patrickmn/go-cache
+  version: 1881a9bccb818787f68c52bfba648c6cf34c34fa
 - package: googlemaps.github.io/maps
   version: b286da8ee62f92267b9cc685fea7f006b80be4ad
 - package: github.com/phyber/negroni-gzip

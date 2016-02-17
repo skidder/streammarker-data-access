@@ -1,5 +1,5 @@
-hash: 600a9785024e15b4992df869ae87ab97124a0331e4739b0c2c07184383325784
-updated: 2016-01-19T17:34:02.78739137-08:00
+hash: fd2478978f7a08880e4ca1988e9b3836b5c5b311944c7011397777bc65c41b36
+updated: 2016-02-16T18:01:59.559279134-08:00
 imports:
 - name: github.com/aws/aws-sdk-go
   version: 4f9a300f2af32035b3ae8bd0ce9b0fe8412df743
@@ -32,6 +32,8 @@ imports:
   version: e8116c9c66e641e9f81fc0a79fac923dfc646378
 - name: github.com/mholt/binding
   version: 6c082304f300fc70793cb0be18af0fdd4acd2b75
+- name: github.com/patrickmn/go-cache
+  version: 1881a9bccb818787f68c52bfba648c6cf34c34fa
 - name: github.com/phyber/negroni-gzip
   version: 1211b7a0892223f5b3f1af8629ea6c3d9f984028
   subpackages:
