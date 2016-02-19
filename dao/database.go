@@ -33,22 +33,21 @@ func NewDatabase(dynamoDBService *dynamodb.DynamoDB, geoLookup *geo.GoogleGeoLoo
 }
 
 // Get the amount of time to wait for a table to finish being created
-func (d *Database) GetTableWaitTime() (t time.Duration) {
+func (d *Database) GetTableWaitTime() time.Duration {
 	var waitTime string
 	if waitTime = os.Getenv("STREAMMARKER_DYNAMO_WAIT_TIME"); waitTime == "" {
 		waitTime = "30s"
 	}
 
-	var err error
-	if t, err = time.ParseDuration(waitTime); err != nil {
-		t = 30 * time.Second
+	if t, err := time.ParseDuration(waitTime); err != nil {
+		return 30 * time.Second
+	} else {
+		return t
 	}
-	return
 }
 
 // Get the account record for the given account ID
-func (d *Database) GetAccount(accountID string) (account *Account, err error) {
-
+func (d *Database) GetAccount(accountID string) (*Account, error) {
 	params := &dynamodb.GetItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
 			"id": &dynamodb.AttributeValue{
@@ -63,23 +62,24 @@ func (d *Database) GetAccount(accountID string) (account *Account, err error) {
 		ConsistentRead: aws.Bool(true),
 	}
 
-	var resp *dynamodb.GetItemOutput
-	if resp, err = d.dynamoDBService.GetItem(params); err == nil {
+	if resp, err := d.dynamoDBService.GetItem(params); err == nil {
 		if resp.Item != nil {
-			account = &Account{
+			account := &Account{
 				ID:    accountID,
 				Name:  *resp.Item["name"].S,
 				State: *resp.Item["state"].S,
 			}
+			return account, nil
 		} else {
-			err = errors.New(fmt.Sprintf("Account not found: %s", accountID))
+			return nil, errors.New(fmt.Sprintf("Account not found: %s", accountID))
 		}
+	} else {
+		return nil, err
 	}
-	return
 }
 
 // Get the Relay record for the given relay ID
-func (d *Database) GetRelay(relayID string) (relay *Relay, err error) {
+func (d *Database) GetRelay(relayID string) (*Relay, error) {
 	params := &dynamodb.GetItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
 			"id": &dynamodb.AttributeValue{
@@ -95,20 +95,21 @@ func (d *Database) GetRelay(relayID string) (relay *Relay, err error) {
 		ConsistentRead: aws.Bool(true),
 	}
 
-	var resp *dynamodb.GetItemOutput
-	if resp, err = d.dynamoDBService.GetItem(params); err == nil {
+	if resp, err := d.dynamoDBService.GetItem(params); err == nil {
 		if resp.Item != nil {
-			relay = &Relay{
+			relay := &Relay{
 				ID:        relayID,
 				AccountID: *resp.Item["account_id"].S,
 				Name:      *resp.Item["name"].S,
 				State:     *resp.Item["state"].S,
 			}
+			return relay, nil
 		} else {
-			err = errors.New(fmt.Sprintf("Relay not found: %s", relayID))
+			return nil, errors.New(fmt.Sprintf("Relay not found: %s", relayID))
 		}
+	} else {
+		return nil, err
 	}
-	return
 }
 
 func (d *Database) UpdateSensor(sensorID string, sensorUpdates *Sensor) (*Sensor, error) {
@@ -167,7 +168,7 @@ func (d *Database) UpdateSensor(sensorID string, sensorUpdates *Sensor) (*Sensor
 }
 
 // Get the Sensor record for the given sensor ID
-func (d *Database) GetSensor(sensorId string) (sensor *Sensor, err error) {
+func (d *Database) GetSensor(sensorId string) (*Sensor, error) {
 	params := &dynamodb.GetItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
 			"id": &dynamodb.AttributeValue{
@@ -187,10 +188,9 @@ func (d *Database) GetSensor(sensorId string) (sensor *Sensor, err error) {
 		ConsistentRead: aws.Bool(true),
 	}
 
-	var resp *dynamodb.GetItemOutput
-	if resp, err = d.dynamoDBService.GetItem(params); err == nil {
+	if resp, err := d.dynamoDBService.GetItem(params); err == nil {
 		if resp.Item != nil {
-			sensor = &Sensor{
+			sensor := &Sensor{
 				ID:              sensorId,
 				AccountID:       *resp.Item["account_id"].S,
 				Name:            *resp.Item["name"].S,
@@ -213,15 +213,17 @@ func (d *Database) GetSensor(sensorId string) (sensor *Sensor, err error) {
 					sensor.TimeZoneName = tz.TimeZoneName
 				}
 			}
+			return sensor, nil
 		} else {
-			err = errors.New(fmt.Sprintf("Sensor not found: %s", sensorId))
+			return nil, errors.New(fmt.Sprintf("Sensor not found: %s", sensorId))
 		}
+	} else {
+		return nil, err
 	}
-	return
 }
 
 // Get the Sensor records for the given account
-func (d *Database) GetSensors(accountId string, state string) (sensor []*Sensor, err error) {
+func (d *Database) GetSensors(accountId string, state string) ([]*Sensor, error) {
 	params := &dynamodb.QueryInput{
 		TableName: aws.String("sensors"),
 		Select:    aws.String("ALL_PROJECTED_ATTRIBUTES"),
@@ -240,8 +242,7 @@ func (d *Database) GetSensors(accountId string, state string) (sensor []*Sensor,
 	}
 
 	sensors := make([]*Sensor, 0)
-	var resp *dynamodb.QueryOutput
-	if resp, err = d.dynamoDBService.Query(params); err == nil {
+	if resp, err := d.dynamoDBService.Query(params); err == nil {
 		for _, sensorRecord := range resp.Items {
 			if state != "" && *sensorRecord["state"].S != state {
 				continue
@@ -266,8 +267,10 @@ func (d *Database) GetSensors(accountId string, state string) (sensor []*Sensor,
 			}
 			sensors = append(sensors, s)
 		}
+		return sensors, nil
+	} else {
+		return nil, err
 	}
-	return sensors, err
 }
 
 // Get the latest sensor readings for the given account
