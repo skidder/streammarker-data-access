@@ -27,7 +27,7 @@ dependencies:
 test:
   override:
     - cd ~/.go_workspace/src/github.com/urlgrey/streammarker-data-access && make all
-    # - cd ~/.go_workspace/src/github.com/urlgrey/streammarker-data-access/cucumber && ./test.sh -t ~@broken -t ~@wip -t ~@todo
+    - cd ~/.go_workspace/src/github.com/urlgrey/streammarker-data-access/cucumber && ./test.sh -t ~@broken -t ~@wip -t ~@todo
   post:
     - cd ~/.go_workspace/src/github.com/urlgrey/streammarker-data-access && make docker-build
     # - docker run -d -e AWS_REGION=us-east-1 -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -p 3000:3000 -p 3100:3100 urlgrey/streammarker-data-access:latest; sleep 5
