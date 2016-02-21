@@ -23,7 +23,7 @@ dependencies:
     - sudo cp /tmp/go/linux-amd64/glide /usr/local/bin/glide
   override:
     - cd ~/.go_workspace/src/github.com/urlgrey/streammarker-data-access && glide install
-    # - cd ~/.go_workspace/src/github.com/urlgrey/streammarker-data-access/cucumber && bundle install
+    - cd ~/.go_workspace/src/github.com/urlgrey/streammarker-data-access/cucumber && bundle install
 test:
   override:
     - cd ~/.go_workspace/src/github.com/urlgrey/streammarker-data-access && make all
