@@ -1,8 +1,6 @@
 {
   "sensor_1_update": {
     "name": "Sensor XYZ",
-    "timezone_id": "Africa/Ndjamena",
-    "timezone_name": "West Africa Standard Time",
     "location_enabled": false,
     "longitude": 20,
     "state": "inactive",
@@ -377,10 +375,8 @@
   },
   "sensor_1": {
     "name": "Sensor X",
-    "timezone_id": "America/Los_Angeles",
     "location_enabled": true,
     "longitude": -122.181369,
-    "timezone_name": "Pacific Standard Time",
     "state": "active",
     "sample_frequency": 1,
     "latitude": 38.093454999999999,
