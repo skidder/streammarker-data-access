@@ -47,12 +47,7 @@ ENV['STREAMMARKER_DYNAMO_DEVICE_READINGS_TABLE'] = 'sensor_readings'
 ENV['STREAMMARKER_DYNAMO_ENDPOINT'] = "http://#{FAKEDYNAMO_HOST}:#{FAKEDYNAMO_PORT}"
 ENV['STREAMMARKER_DYNAMODB_DISABLE_SSL'] = 'TRUE'
 ENV['AWS_REGION'] = 'us-east-1'
-ENV['GOOGLE_API_KEY'] = 'AIzaSyC_7IR4Mc-Ae0pwvl0oV915GrVTSsjqVTc'
-
-STREAMMARKER_QUEUE_NAME = 'Queue'
-ENV['STREAMMARKER_SQS_ENDPOINT'] = "http://#{FAKESQS_HOST}:#{FAKESQS_PORT}"
-ENV['STREAMMARKER_QUEUE_NAME'] = "Queue"
-ENV['STREAMMARKER_SQS_QUEUE_URL'] = ENV['STREAMMARKER_SQS_ENDPOINT'] + '/' + STREAMMARKER_QUEUE_NAME
+ENV['GOOGLE_API_KEY'] = 'foobar'
 
 def wait_till_up_or_timeout
   healthy = false
@@ -86,22 +81,6 @@ def wait_till_up_or_timeout
 end
 
 def startup
-
-  # @fakesqs_process = ChildProcess.build('fake_sqs', '-p', FAKESQS_PORT)
-  # @fakesqs_process.io.stdout = File.new(LOG_DIR + '/fakesqs.log', 'w')
-  # @fakesqs_process.io.stderr = @fakesqs_process.io.stdout
-  # @fakesqs_process.leader = true
-  # @fakesqs_process.start
-
-  # # Give Fake SQS a sec to start, and create the queue we're about to use in it.
-  # sleep(1)
-  # sqs = AWS::SQS.new(:access_key_id       => 'x',
-  #                      :secret_access_key => 'y',
-  #                      :use_ssl           => false,
-  #                      :sqs_endpoint      => FAKESQS_HOST,
-  #                      :sqs_port          => FAKESQS_PORT.to_i
-  #                      )
-  # sqs.client.create_queue(queue_name: STREAMMARKER_QUEUE_NAME)
   File.delete(DYNAMODB_DIR + "/shared-local-instance.db") if File.exists?(DYNAMODB_DIR + "/shared-local-instance.db")
   @fakedynamo_process = ChildProcess.build('java', '-Djava.library.path=./DynamoDBLocal_lib', '-jar', 'DynamoDBLocal.jar', '-sharedDb', '--port', FAKEDYNAMO_PORT)
   @fakedynamo_process.io.stdout = File.new(LOG_DIR + '/fakedynamo.log', 'w')
@@ -195,7 +174,6 @@ end
 
 def shutdown
   @app_process.stop
-  # @fakesqs_process.stop
   @fakedynamo_process.stop
 end
 
@@ -203,7 +181,6 @@ end
 
 puts 'Application Endpoint: ' + APPLICATION_ENDPOINT.to_s
 puts 'Log Directory: ' + LOG_DIR.to_s
-# puts "fakesqs running at: #{FAKESQS_HOST}:#{FAKESQS_PORT}"
 puts "fakedynamo running at: #{FAKEDYNAMO_HOST}:#{FAKEDYNAMO_PORT}"
 
 AWS.config(s3_endpoint: FAKES3_HOST, s3_port: FAKES3_PORT, use_ssl: false, s3_force_path_style: true, :access_key_id => 'x', :secret_access_key => 'y')
