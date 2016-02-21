@@ -5,7 +5,6 @@ require 'tempfile'
 require 'httparty'
 require 'json_spec'
 require 'erubis'
-require 'aws-sdk-v1'
 require 'aws-sdk'
 require 'json'
 require 'time'
@@ -182,8 +181,6 @@ end
 puts 'Application Endpoint: ' + APPLICATION_ENDPOINT.to_s
 puts 'Log Directory: ' + LOG_DIR.to_s
 puts "fakedynamo running at: #{FAKEDYNAMO_HOST}:#{FAKEDYNAMO_PORT}"
-
-AWS.config(s3_endpoint: FAKES3_HOST, s3_port: FAKES3_PORT, use_ssl: false, s3_force_path_style: true, :access_key_id => 'x', :secret_access_key => 'y')
 
 startup
 wait_till_up_or_timeout

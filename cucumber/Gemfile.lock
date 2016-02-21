@@ -8,15 +8,12 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     awesome_print (1.6.1)
-    aws-sdk (2.2.9)
-      aws-sdk-resources (= 2.2.9)
-    aws-sdk-core (2.2.9)
+    aws-sdk (2.2.18)
+      aws-sdk-resources (= 2.2.18)
+    aws-sdk-core (2.2.18)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.2.9)
-      aws-sdk-core (= 2.2.9)
-    aws-sdk-v1 (1.66.0)
-      json (~> 1.4)
-      nokogiri (>= 1.4.4)
+    aws-sdk-resources (2.2.18)
+      aws-sdk-core (= 2.2.18)
     builder (3.2.2)
     byebug (8.2.1)
     childprocess (0.5.9)
@@ -57,13 +54,10 @@ GEM
     json_spec (1.1.4)
       multi_json (~> 1.0)
       rspec (>= 2.0, < 4.0)
-    mini_portile2 (2.0.0)
     minitest (5.8.3)
     multi_json (1.11.2)
     multi_test (0.1.2)
     multi_xml (0.5.5)
-    nokogiri (1.6.7.1)
-      mini_portile2 (~> 2.0.0.rc2)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
@@ -95,8 +89,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
-  aws-sdk
-  aws-sdk-v1
+  aws-sdk (~> 2.2, >= 2.2.18)
   byebug
   childprocess
   cucumber
