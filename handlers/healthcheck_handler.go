@@ -11,21 +11,23 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// HealthCheckHandler represents a healthcheck instance
 type HealthCheckHandler struct {
 	dynamoDB *dynamodb.DynamoDB
 }
 
+// NewHealthCheckHandler constructs a new HealthCheckHandler
 func NewHealthCheckHandler(dynamoDB *dynamodb.DynamoDB) *HealthCheckHandler {
 	return &HealthCheckHandler{dynamoDB}
 }
 
-// Add routes to router
+// InitializeRouterForHealthCheckHandler initiailizes a HealthCheckHandler on the given router
 func InitializeRouterForHealthCheckHandler(r *mux.Router, dynamoDB *dynamodb.DynamoDB) {
 	m := NewHealthCheckHandler(dynamoDB)
 	r.HandleFunc("/healthcheck", m.HealthCheck).Methods("GET")
 }
 
-// Examine and report the health of the component and dependencies
+// HealthCheck performs a health-check
 func (h *HealthCheckHandler) HealthCheck(w http.ResponseWriter, r *http.Request) {
 	params := &dynamodb.DescribeTableInput{
 		TableName: aws.String("sensors"), // Required

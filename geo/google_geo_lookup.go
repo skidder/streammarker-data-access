@@ -9,30 +9,35 @@ import (
 	"googlemaps.github.io/maps"
 )
 
+// GoogleGeoLookup to lookup timezone details
 type GoogleGeoLookup struct {
-	googleApiKey  string
+	googleAPIKey  string
 	mapsClient    *maps.Client
 	locationCache *cache.Cache
 }
 
+// TimezoneInfo has timezone details
 type TimezoneInfo struct {
 	TimeZoneID   string
 	TimeZoneName string
 }
 
-func NewGoogleGeoLookup(googleApiKey string) *GoogleGeoLookup {
+// NewGoogleGeoLookup constructs a new GoogleGeoLookup instance
+func NewGoogleGeoLookup(googleAPIKey string) *GoogleGeoLookup {
 	return &GoogleGeoLookup{
-		googleApiKey:  googleApiKey,
+		googleAPIKey:  googleAPIKey,
 		locationCache: cache.New(1*time.Hour, 1*time.Minute),
 	}
 }
 
-func (g *GoogleGeoLookup) Init() error {
+// Initialize a GoogleGeoLookup instance
+func (g *GoogleGeoLookup) Initialize() error {
 	var err error
-	g.mapsClient, err = maps.NewClient(maps.WithAPIKey(g.googleApiKey))
+	g.mapsClient, err = maps.NewClient(maps.WithAPIKey(g.googleAPIKey))
 	return err
 }
 
+// FindTimezoneForLocation get timezone for a given location
 func (g *GoogleGeoLookup) FindTimezoneForLocation(latitude, longitude float64) (*TimezoneInfo, error) {
 	// check local cache for timezone info for this location
 	locationHash := fmt.Sprintf("%f,%f", latitude, longitude)

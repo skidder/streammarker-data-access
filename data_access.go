@@ -15,10 +15,6 @@ import (
 	"github.com/urlgrey/streammarker-data-access/handlers"
 )
 
-const (
-	DEFAULT_QUEUE_NAME = "streammarker-data-access-messages"
-)
-
 func main() {
 	mainServer := negroni.New()
 
@@ -34,7 +30,7 @@ func main() {
 	s := session.New()
 	dynamoDBConnection := createDynamoDBConnection(s)
 	geoLookup := geo.NewGoogleGeoLookup(os.Getenv("GOOGLE_API_KEY"))
-	geoLookup.Init()
+	geoLookup.Initialize()
 	db := dao.NewDatabase(dynamoDBConnection, geoLookup)
 
 	// Initialize HTTP service handlers
