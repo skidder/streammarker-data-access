@@ -77,7 +77,7 @@ func (m *SensorReadingsHandler) QueryForSensorReadings(resp http.ResponseWriter,
 	var startTime, endTime int64
 	if q.Get("start_time") != "" {
 		if startTime, err = strconv.ParseInt(q.Get("start_time"), 10, 32); err != nil {
-			log.Printf("Unable to parse start_time as int", err.Error())
+			log.Printf("Unable to parse start_time as int: %s", err.Error())
 			http.Error(resp, "Unable to parse start_time as int", http.StatusBadRequest)
 			return
 		}
@@ -87,7 +87,7 @@ func (m *SensorReadingsHandler) QueryForSensorReadings(resp http.ResponseWriter,
 	}
 	if q.Get("end_time") != "" {
 		if endTime, err = strconv.ParseInt(q.Get("end_time"), 10, 32); err != nil {
-			log.Printf("Unable to parse end_time as int", err.Error())
+			log.Printf("Unable to parse end_time as int: %s", err.Error())
 			http.Error(resp, "Unable to parse end_time as int", http.StatusBadRequest)
 			return
 		}
@@ -116,7 +116,7 @@ func (m *SensorReadingsHandler) QueryForHourlySensorReadings(resp http.ResponseW
 	var startTime, endTime int64
 	if q.Get("start_time") != "" {
 		if startTime, err = strconv.ParseInt(q.Get("start_time"), 10, 32); err != nil {
-			log.Printf("Unable to parse start_time as int", err.Error())
+			log.Printf("Unable to parse start_time as int: %s", err.Error())
 			http.Error(resp, "Unable to parse start_time as int", http.StatusBadRequest)
 		}
 	} else {
@@ -125,7 +125,7 @@ func (m *SensorReadingsHandler) QueryForHourlySensorReadings(resp http.ResponseW
 	}
 	if q.Get("end_time") != "" {
 		if endTime, err = strconv.ParseInt(q.Get("end_time"), 10, 32); err != nil {
-			log.Printf("Unable to parse end_time as int", err.Error())
+			log.Printf("Unable to parse end_time as int: %s", err.Error())
 			http.Error(resp, "Unable to parse end_time as int", http.StatusBadRequest)
 		}
 	} else {
