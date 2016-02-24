@@ -49,7 +49,7 @@ func (d *Database) GetTableWaitTime() time.Duration {
 func (d *Database) GetAccount(accountID string) (*Account, error) {
 	params := &dynamodb.GetItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
-			"id": &dynamodb.AttributeValue{
+			"id": {
 				S: aws.String(accountID),
 			},
 		},
@@ -80,7 +80,7 @@ func (d *Database) GetAccount(accountID string) (*Account, error) {
 func (d *Database) GetRelay(relayID string) (*Relay, error) {
 	params := &dynamodb.GetItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
-			"id": &dynamodb.AttributeValue{
+			"id": {
 				S: aws.String(relayID),
 			},
 		},
@@ -113,43 +113,43 @@ func (d *Database) GetRelay(relayID string) (*Relay, error) {
 func (d *Database) UpdateSensor(sensorID string, sensorUpdates *Sensor) (*Sensor, error) {
 	params := &dynamodb.UpdateItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
-			"id": &dynamodb.AttributeValue{
+			"id": {
 				S: aws.String(sensorID),
 			},
 		},
 		TableName: aws.String("sensors"),
 		AttributeUpdates: map[string]*dynamodb.AttributeValueUpdate{
-			"name": &dynamodb.AttributeValueUpdate{
+			"name": {
 				Action: &dynamoPutAction,
 				Value: &dynamodb.AttributeValue{
 					S: aws.String(sensorUpdates.Name),
 				},
 			},
-			"state": &dynamodb.AttributeValueUpdate{
+			"state": {
 				Action: &dynamoPutAction,
 				Value: &dynamodb.AttributeValue{
 					S: aws.String(sensorUpdates.State),
 				},
 			},
-			"location_enabled": &dynamodb.AttributeValueUpdate{
+			"location_enabled": {
 				Action: &dynamoPutAction,
 				Value: &dynamodb.AttributeValue{
 					BOOL: aws.Bool(sensorUpdates.LocationEnabled),
 				},
 			},
-			"latitude": &dynamodb.AttributeValueUpdate{
+			"latitude": {
 				Action: &dynamoPutAction,
 				Value: &dynamodb.AttributeValue{
 					N: aws.String(fmt.Sprintf("%f", sensorUpdates.Latitude)),
 				},
 			},
-			"longitude": &dynamodb.AttributeValueUpdate{
+			"longitude": {
 				Action: &dynamoPutAction,
 				Value: &dynamodb.AttributeValue{
 					N: aws.String(fmt.Sprintf("%f", sensorUpdates.Longitude)),
 				},
 			},
-			"sample_frequency": &dynamodb.AttributeValueUpdate{
+			"sample_frequency": {
 				Action: &dynamoPutAction,
 				Value: &dynamodb.AttributeValue{
 					N: aws.String(fmt.Sprintf("%d", sensorUpdates.SampleFrequency)),
@@ -169,7 +169,7 @@ func (d *Database) UpdateSensor(sensorID string, sensorUpdates *Sensor) (*Sensor
 func (d *Database) GetSensor(sensorID string) (*Sensor, error) {
 	params := &dynamodb.GetItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
-			"id": &dynamodb.AttributeValue{
+			"id": {
 				S: aws.String(sensorID),
 			},
 		},
