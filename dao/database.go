@@ -22,11 +22,13 @@ var (
 	dynamoPutAction = "PUT"
 )
 
+// Database can be used to read and write sensor & relay data
 type Database struct {
 	dynamoDBService *dynamodb.DynamoDB
 	geoLookup       *geo.GoogleGeoLookup
 }
 
+// NewDatabase constructs a new Database instance
 func NewDatabase(dynamoDBService *dynamodb.DynamoDB, geoLookup *geo.GoogleGeoLookup) *Database {
 	return &Database{dynamoDBService: dynamoDBService, geoLookup: geoLookup}
 }
@@ -239,7 +241,8 @@ func (d *Database) GetSensors(accountID string, state string) ([]*Sensor, error)
 	}
 
 	var sensors []*Sensor
-	if resp, err := d.dynamoDBService.Query(params); err == nil {
+	resp, err := d.dynamoDBService.Query(params)
+	if err == nil {
 		for _, sensorRecord := range resp.Items {
 			if state != "" && *sensorRecord["state"].S != state {
 				continue
@@ -265,12 +268,11 @@ func (d *Database) GetSensors(accountID string, state string) ([]*Sensor, error)
 			sensors = append(sensors, s)
 		}
 		return sensors, nil
-	} else {
-		return nil, err
 	}
+	return nil, err
 }
 
-// Get the latest sensor readings for the given account
+// GetLastSensorReadings returns the latest sensor readings for the given account
 func (d *Database) GetLastSensorReadings(accountID string, state string) (*LatestSensorReadings, error) {
 	var sensors []*Sensor
 	var err error
@@ -322,6 +324,7 @@ func (d *Database) GetLastSensorReadings(accountID string, state string) (*Lates
 	return latestReadings, err
 }
 
+// QueryForHourlySensorReadings returns hourly readings for a sensor in an account
 func (d *Database) QueryForHourlySensorReadings(accountID, sensorID string, startTime, endTime int64) (*QueryForHourlySensorReadingsResults, error) {
 	endTimeString := strconv.FormatInt(endTime, 10)
 	var err error
@@ -329,7 +332,7 @@ func (d *Database) QueryForHourlySensorReadings(accountID, sensorID string, star
 	results := &QueryForHourlySensorReadingsResults{accountID, sensorID, make([]*HourlyMeasurements, 0)}
 	endTimeTS := time.Unix(endTime, 0)
 	for i := 0; i < 3; i++ {
-		monthReadings := make([]*HourlyMeasurements, 0)
+		monthReadings := []*HourlyMeasurements{}
 		startTimeTS := time.Unix(startTime, 0)
 		startTimeTS = startTimeTS.AddDate(0, i, 0)
 		if i > 0 {
@@ -385,6 +388,7 @@ func (d *Database) QueryForHourlySensorReadings(accountID, sensorID string, star
 	return results, err
 }
 
+// QueryForSensorReadings returns sensor readings within an account
 func (d *Database) QueryForSensorReadings(accountID, sensorID string, startTime, endTime int64) (*QueryForSensorReadingsResults, error) {
 	endTimeString := strconv.FormatInt(endTime, 10)
 	var err error
@@ -392,7 +396,7 @@ func (d *Database) QueryForSensorReadings(accountID, sensorID string, startTime,
 	results := &QueryForSensorReadingsResults{accountID, sensorID, make([]*MinimalReading, 0)}
 	endTimeTS := time.Unix(endTime, 0)
 	for i := 0; i < 3; i++ {
-		monthReadings := make([]*MinimalReading, 0)
+		monthReadings := []*MinimalReading{}
 		startTimeTS := time.Unix(startTime, 0)
 		startTimeTS = startTimeTS.AddDate(0, i, 0)
 		if i > 0 {
@@ -450,6 +454,7 @@ func (d *Database) QueryForSensorReadings(accountID, sensorID string, startTime,
 	return results, err
 }
 
+// Relay has details for a StreamMarker relay
 type Relay struct {
 	ID        string `json:"id"`
 	AccountID string `json:"account_id"`
@@ -457,21 +462,25 @@ type Relay struct {
 	State     string `json:"state"`
 }
 
+// QueryForSensorReadingsResults has results for a sensor-readings query
 type QueryForSensorReadingsResults struct {
 	AccountID string            `json:"account_id"`
 	SensorID  string            `json:"sensor_id"`
 	Readings  []*MinimalReading `json:"readings"`
 }
 
+// MinimalReading represents a single reading
 type MinimalReading struct {
 	Timestamp    int32         `json:"timestamp"`
 	Measurements []Measurement `json:"measurements"`
 }
 
+// LatestSensorReadings contains the latest readings for a set of sensors
 type LatestSensorReadings struct {
 	Sensors map[string]*SensorReading `json:"sensors"`
 }
 
+// SensorReading has details for a single reading
 type SensorReading struct {
 	SensorID     string        `json:"sensor_id"`
 	AccountID    string        `json:"account_id"`
@@ -481,6 +490,7 @@ type SensorReading struct {
 	Measurements []Measurement `json:"measurements"`
 }
 
+// Sensor represents a sensor capable of producing measurements
 type Sensor struct {
 	ID              string  `json:"id"`
 	AccountID       string  `json:"account_id"`
@@ -494,35 +504,41 @@ type Sensor struct {
 	SampleFrequency int64   `json:"sample_frequency,omitempty"`
 }
 
+// Account has account details
 type Account struct {
 	ID    string `json:"id"`
 	Name  string `json:"name"`
 	State string `json:"state"`
 }
 
+// Measurement represents a single measurement's details
 type Measurement struct {
 	Name  string  `json:"name"`
 	Value float64 `json:"value"`
 	Unit  string  `json:"unit"`
 }
 
+// MinMaxMeasurement has the minimum and maximum values for a measurement
 type MinMaxMeasurement struct {
 	Name string      `json:"name"`
 	Min  Measurement `json:"min"`
 	Max  Measurement `json:"max"`
 }
 
+// HourlyMeasurements has a set of MinMaxMeasurement values associated with a timestamp
 type HourlyMeasurements struct {
 	Timestamp    int32                `json:"timestamp"`
 	Measurements []*MinMaxMeasurement `json:"measurements"`
 }
 
+// QueryForHourlySensorReadingsResults has results from an hourly sensor-readings query
 type QueryForHourlySensorReadingsResults struct {
 	AccountID string                `json:"account_id"`
 	SensorID  string                `json:"sensor_id"`
 	Readings  []*HourlyMeasurements `json:"readings"`
 }
 
+// FieldMap binds Sensor value for JSON mapping
 func (s *Sensor) FieldMap() binding.FieldMap {
 	return binding.FieldMap{
 		&s.Name:            "name",
