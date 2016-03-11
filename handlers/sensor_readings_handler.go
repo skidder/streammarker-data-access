@@ -27,7 +27,6 @@ func InitializeRouterForSensorsDataRetrieval(r *mux.Router, database *dao.Databa
 	r.HandleFunc("/data-access/v1/sensors/account/{account_id}", m.GetSensors).Methods("GET")
 	r.HandleFunc("/data-access/v1/last_sensor_readings/account/{account_id}", m.GetLastSensorReadings).Methods("GET")
 	r.HandleFunc("/data-access/v1/sensor_readings", m.QueryForSensorReadings).Methods("GET")
-	r.HandleFunc("/data-access/v1/hourly_sensor_readings", m.QueryForHourlySensorReadings).Methods("GET")
 }
 
 // GetSensors retrieves a list of sensors in an account
@@ -101,43 +100,6 @@ func (m *SensorReadingsHandler) QueryForSensorReadings(resp http.ResponseWriter,
 		responseEncoder.Encode(sensorReadings)
 	} else {
 		log.Printf("Error querying for sensor readings for account: %s", err.Error())
-		http.Error(resp,
-			"Error querying for sensor readings for account",
-			http.StatusInternalServerError)
-	}
-}
-
-// QueryForHourlySensorReadings retrieves hourly readings for a sensor in an account matching certain criteria
-func (m *SensorReadingsHandler) QueryForHourlySensorReadings(resp http.ResponseWriter, req *http.Request) {
-	q := req.URL.Query()
-	accountID := q.Get("account_id")
-	sensorID := q.Get("sensor_id")
-	var err error
-	var startTime, endTime int64
-	if q.Get("start_time") != "" {
-		if startTime, err = strconv.ParseInt(q.Get("start_time"), 10, 32); err != nil {
-			log.Printf("Unable to parse start_time as int: %s", err.Error())
-			http.Error(resp, "Unable to parse start_time as int", http.StatusBadRequest)
-		}
-	} else {
-		// default start-time is one month ago
-		startTime = time.Now().AddDate(0, -1, 0).Unix()
-	}
-	if q.Get("end_time") != "" {
-		if endTime, err = strconv.ParseInt(q.Get("end_time"), 10, 32); err != nil {
-			log.Printf("Unable to parse end_time as int: %s", err.Error())
-			http.Error(resp, "Unable to parse end_time as int", http.StatusBadRequest)
-		}
-	} else {
-		endTime = time.Now().Unix()
-	}
-	if sensorReadings, err := m.database.QueryForHourlySensorReadings(accountID, sensorID, startTime, endTime); err == nil {
-		resp.Header().Set("Content-Type", "application/json")
-		resp.WriteHeader(http.StatusOK)
-		responseEncoder := json.NewEncoder(resp)
-		responseEncoder.Encode(sensorReadings)
-	} else {
-		log.Printf("Error querying for hourly sensor readings for account: %s", err.Error())
 		http.Error(resp,
 			"Error querying for sensor readings for account",
 			http.StatusInternalServerError)

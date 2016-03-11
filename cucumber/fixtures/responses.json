@@ -8,48 +8,6 @@
     "latitude": 10,
     "id": "1"
   },
-  "query_for_hourly_readings_current_month": {
-    "sensor_id": "1",
-    "account_id": "account1",
-    "readings": [
-      {
-        "timestamp": 1447455600,
-        "measurements": [
-          {
-            "max": {
-              "value": 30,
-              "name": "soil_moisture_1",
-              "unit": "VWC"
-            },
-            "name": "soil_moisture_1",
-            "min": {
-              "value": 22,
-              "name": "soil_moisture_1",
-              "unit": "VWC"
-            }
-          }
-        ]
-      },
-      {
-        "timestamp": 1447369200,
-        "measurements": [
-          {
-            "max": {
-              "value": 28,
-              "name": "soil_moisture_1",
-              "unit": "VWC"
-            },
-            "name": "soil_moisture_1",
-            "min": {
-              "value": 24,
-              "name": "soil_moisture_1",
-              "unit": "VWC"
-            }
-          }
-        ]
-      }
-    ]
-  },
   "latest_sensor_readings": {
     "sensors": {
       "1": {
@@ -188,84 +146,6 @@
       }
     ]
   },
-  "query_for_hourly_readings_last_2_months": {
-    "sensor_id": "1",
-    "account_id": "account1",
-    "readings": [
-      {
-        "timestamp": 1444777200,
-        "measurements": [
-          {
-            "max": {
-              "value": 30,
-              "name": "soil_moisture_1",
-              "unit": "VWC"
-            },
-            "name": "soil_moisture_1",
-            "min": {
-              "value": 22,
-              "name": "soil_moisture_1",
-              "unit": "VWC"
-            }
-          }
-        ]
-      },
-      {
-        "timestamp": 1444690800,
-        "measurements": [
-          {
-            "max": {
-              "value": 28,
-              "name": "soil_moisture_1",
-              "unit": "VWC"
-            },
-            "name": "soil_moisture_1",
-            "min": {
-              "value": 24,
-              "name": "soil_moisture_1",
-              "unit": "VWC"
-            }
-          }
-        ]
-      },
-      {
-        "timestamp": 1447455600,
-        "measurements": [
-          {
-            "max": {
-              "value": 30,
-              "name": "soil_moisture_1",
-              "unit": "VWC"
-            },
-            "name": "soil_moisture_1",
-            "min": {
-              "value": 22,
-              "name": "soil_moisture_1",
-              "unit": "VWC"
-            }
-          }
-        ]
-      },
-      {
-        "timestamp": 1447369200,
-        "measurements": [
-          {
-            "max": {
-              "value": 28,
-              "name": "soil_moisture_1",
-              "unit": "VWC"
-            },
-            "name": "soil_moisture_1",
-            "min": {
-              "value": 24,
-              "name": "soil_moisture_1",
-              "unit": "VWC"
-            }
-          }
-        ]
-      }
-    ]
-  },
   "query_for_readings_last_2_months_with_1_month_activity": {
     "sensor_id": "1",
     "account_id": "account1",
@@ -328,48 +208,6 @@
         "name": "Sensor X",
         "location_enabled": false,
         "sample_frequency": 1
-      }
-    ]
-  },
-  "query_for_hourly_readings_last_2_months_with_1_month_activity": {
-    "sensor_id": "1",
-    "account_id": "account1",
-    "readings": [
-      {
-        "timestamp": 1444777200,
-        "measurements": [
-          {
-            "max": {
-              "unit": "VWC",
-              "name": "soil_moisture_1",
-              "value": 30
-            },
-            "name": "soil_moisture_1",
-            "min": {
-              "unit": "VWC",
-              "name": "soil_moisture_1",
-              "value": 22
-            }
-          }
-        ]
-      },
-      {
-        "timestamp": 1444690800,
-        "measurements": [
-          {
-            "max": {
-              "unit": "VWC",
-              "name": "soil_moisture_1",
-              "value": 28
-            },
-            "name": "soil_moisture_1",
-            "min": {
-              "unit": "VWC",
-              "name": "soil_moisture_1",
-              "value": 24
-            }
-          }
-        ]
       }
     ]
   },

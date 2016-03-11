@@ -324,70 +324,6 @@ func (d *Database) GetLastSensorReadings(accountID string, state string) (*Lates
 	return latestReadings, err
 }
 
-// QueryForHourlySensorReadings returns hourly readings for a sensor in an account
-func (d *Database) QueryForHourlySensorReadings(accountID, sensorID string, startTime, endTime int64) (*QueryForHourlySensorReadingsResults, error) {
-	endTimeString := strconv.FormatInt(endTime, 10)
-	var err error
-
-	results := &QueryForHourlySensorReadingsResults{accountID, sensorID, make([]*HourlyMeasurements, 0)}
-	endTimeTS := time.Unix(endTime, 0)
-	for i := 0; i < 3; i++ {
-		monthReadings := []*HourlyMeasurements{}
-		startTimeTS := time.Unix(startTime, 0)
-		startTimeTS = startTimeTS.AddDate(0, i, 0)
-		if i > 0 {
-			startTimeTS = time.Date(startTimeTS.Year(), startTimeTS.Month(), 1, 0, 0, 0, 0, startTimeTS.Location())
-		}
-		if endTimeTS.Before(startTimeTS) {
-			break
-		}
-
-		startTimeString := strconv.FormatInt(startTimeTS.Unix(), 10)
-		sensorReadingsTableName := fmt.Sprintf("hourly_sensor_readings_%s", startTimeTS.Format(tableTimestampFormat))
-		params := &dynamodb.QueryInput{
-			TableName:        aws.String(sensorReadingsTableName),
-			Select:           aws.String("ALL_ATTRIBUTES"),
-			ScanIndexForward: aws.Bool(false),
-			Limit:            aws.Int64(10000),
-			KeyConditions: map[string]*dynamodb.Condition{
-				"id": {
-					ComparisonOperator: aws.String("EQ"),
-					AttributeValueList: []*dynamodb.AttributeValue{
-						{
-							S: aws.String(fmt.Sprintf("%s:%s", accountID, sensorID)),
-						},
-					},
-				},
-				"timestamp": {
-					ComparisonOperator: aws.String("BETWEEN"),
-					AttributeValueList: []*dynamodb.AttributeValue{
-						{
-							N: &startTimeString,
-						},
-						{
-							N: &endTimeString,
-						},
-					},
-				},
-			},
-		}
-
-		var resp *dynamodb.QueryOutput
-		if resp, err = d.dynamoDBService.Query(params); err == nil {
-			for _, sensorRecord := range resp.Items {
-				timestamp, _ := strconv.ParseInt(*sensorRecord["timestamp"].N, 10, 32)
-				readings := &HourlyMeasurements{Timestamp: int32(timestamp)}
-				if err = json.Unmarshal([]byte(*sensorRecord["measurements"].S), &readings.Measurements); err != nil {
-					return nil, err
-				}
-				monthReadings = append(monthReadings, readings)
-			}
-		}
-		results.Readings = append(monthReadings, results.Readings...)
-	}
-	return results, err
-}
-
 // QueryForSensorReadings returns sensor readings within an account
 func (d *Database) QueryForSensorReadings(accountID, sensorID string, startTime, endTime int64) (*QueryForSensorReadingsResults, error) {
 	endTimeString := strconv.FormatInt(endTime, 10)
@@ -523,19 +459,6 @@ type MinMaxMeasurement struct {
 	Name string      `json:"name"`
 	Min  Measurement `json:"min"`
 	Max  Measurement `json:"max"`
-}
-
-// HourlyMeasurements has a set of MinMaxMeasurement values associated with a timestamp
-type HourlyMeasurements struct {
-	Timestamp    int32                `json:"timestamp"`
-	Measurements []*MinMaxMeasurement `json:"measurements"`
-}
-
-// QueryForHourlySensorReadingsResults has results from an hourly sensor-readings query
-type QueryForHourlySensorReadingsResults struct {
-	AccountID string                `json:"account_id"`
-	SensorID  string                `json:"sensor_id"`
-	Readings  []*HourlyMeasurements `json:"readings"`
 }
 
 // FieldMap binds Sensor value for JSON mapping
