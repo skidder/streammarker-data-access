@@ -1,5 +1,5 @@
-hash: fd2478978f7a08880e4ca1988e9b3836b5c5b311944c7011397777bc65c41b36
-updated: 2016-02-16T18:01:59.559279134-08:00
+hash: dce9cf95aabfd3a869304c4ff457da2514f770b2a9d40394e91a88e5e5cda98f
+updated: 2016-03-25T08:21:22.753199317-07:00
 imports:
 - name: github.com/aws/aws-sdk-go
   version: 4f9a300f2af32035b3ae8bd0ce9b0fe8412df743
@@ -15,21 +15,24 @@ imports:
 - name: github.com/codegangsta/negroni
   version: c7477ad8e330bef55bf1ebe300cf8aa67c492d1b
 - name: github.com/go-ini/ini
-  version: afbd495e5aaea13597b5e14fe514ddeaa4d76fc3
+  version: 12f418cc7edc5a618a51407b7ac1f1f512139df3
 - name: github.com/gorilla/context
   version: 215affda49addc4c8ef7e2534915df2c8c35c6cd
 - name: github.com/gorilla/mux
   version: 8096f47503459bcc74d1f4c487b7e6e42e5746b5
 - name: github.com/jmespath/go-jmespath
-  version: c01cf91b011868172fdcd9f41838e80c9d716264
+  version: 0b12d6b521d83fc7f755e7cfc1b1fbdd35a01a74
 - name: github.com/kr/pretty
   version: e6ac2fc51e89a3249e82157fa0bb7a18ef9dd5bb
+  repo: https://github.com/kr/pretty
 - name: github.com/kr/pty
   version: f7ee69f31298ecbe5d2b349c711e2547a617d398
+  repo: https://github.com/kr/pty
 - name: github.com/kr/text
   version: bb797dc4fb8320488f47bf11de07a733d7233e1f
+  repo: https://github.com/kr/text
 - name: github.com/lsegal/gucumber
-  version: e8116c9c66e641e9f81fc0a79fac923dfc646378
+  version: 44a4d7eb3b14a88cf82b073dfb7e06277afdc549
 - name: github.com/mholt/binding
   version: 6c082304f300fc70793cb0be18af0fdd4acd2b75
 - name: github.com/patrickmn/go-cache
@@ -49,17 +52,19 @@ imports:
 - name: github.com/vaughan0/go-ini
   version: a98ad7ee00ec53921f08832bc06ecf7fd600e6a1
 - name: golang.org/x/crypto
-  version: f23ba3a5ee43012fcb4b92e1a2a405a92554f4f2
+  version: c197bcf24cde29d3f73c7b4ac6fd41f4384e8af6
+  repo: https://golang.org/x/crypto
 - name: golang.org/x/net
   version: 195180cfebf7362bd243a52477697895128c8777
   subpackages:
   - context
 - name: golang.org/x/text
-  version: cf4986612c83df6c55578ba198316d1684a9a287
+  version: 1b466db55e0ba5d56ef5315c728216b42f796491
+  repo: https://golang.org/x/text
 - name: golang.org/x/tools
-  version: dd6e749ee1461e4067ce1fc2e19d99c6c37d6ba4
+  version: 824b504fc734b5a1937a7860175838a86642481f
 - name: googlemaps.github.io/maps
-  version: b286da8ee62f92267b9cc685fea7f006b80be4ad
+  version: ffa94b00e6641420bd770b494aa03244bb0bad2e
 - name: googlemaps.github.io/maps/internal
-  version: ""
+  version: ffa94b00e6641420bd770b494aa03244bb0bad2e
 devImports: []
