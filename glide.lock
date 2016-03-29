@@ -1,5 +1,5 @@
 hash: 5c1d8bacd802c6e88432e87c3a71c24b05dd68bb260506f5767fccdf0106cf49
-updated: 2016-03-29T06:19:40.054336804-10:00
+updated: 2016-03-29T06:24:34.479286058-10:00
 imports:
 - name: github.com/aws/aws-sdk-go
   version: 4f9a300f2af32035b3ae8bd0ce9b0fe8412df743
@@ -72,6 +72,4 @@ imports:
   version: ffa94b00e6641420bd770b494aa03244bb0bad2e
   subpackages:
   - internal
-- name: googlemaps.github.io/maps/internal
-  version: ffa94b00e6641420bd770b494aa03244bb0bad2e
 devImports: []
