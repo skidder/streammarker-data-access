@@ -63,7 +63,14 @@ func (i *InfluxDAO) GetLastSensorReadings(accountID string, state string) (*Late
 		if series != nil {
 			reading.Measurements = make([]Measurement, 0)
 			for key, value := range series.Columns {
-				if strings.Contains(value, "temperature") {
+				if strings.Contains(value, "time") {
+					var timestamp time.Time
+					timestamp, err = time.Parse(time.RFC3339, series.Values[0][key].(string))
+					if err != nil {
+						return latestReadings, err
+					}
+					reading.Timestamp = timestamp.Unix()
+				} else if strings.Contains(value, "temperature") {
 					var temperatureValue float64
 					temperatureValue, err = series.Values[0][key].(json.Number).Float64()
 					if err == nil {
