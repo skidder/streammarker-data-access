@@ -11,6 +11,10 @@ import:
   - internal/signer/v4
   - service/dynamodb
   - aws/awserr
+- package: github.com/influxdata/influxdb
+  version: 3d544a9136386beeef35e09990856a7537653421
+  subpackages:
+  - client
 - package: github.com/codegangsta/negroni
   version: c7477ad8e330bef55bf1ebe300cf8aa67c492d1b
 - package: github.com/gorilla/context

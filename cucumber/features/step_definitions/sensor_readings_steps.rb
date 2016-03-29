@@ -1,4 +1,6 @@
 Given(/^I have no sensor readings in the database$/) do
+  silently_delete_influxdb_data("sensor_measurements")
+
   begin
     delete_sensor_readings_table(DateTime.now)
   rescue Exception => e
@@ -47,13 +49,13 @@ Given(/^I have two sensors without readings in the database for account "(.*)"$/
 end
 
 Given(/^there are multiple readings for the current month with account "(.*)" and sensor "([^"]*)"$/) do |account_id, sensor_id|
-  put_sensor_reading(account_id, sensor_id, 24.0, 78, DateTime.now.prev_day)
-  put_sensor_reading(account_id, sensor_id, 22.0, 56, DateTime.now)
+  put_sensor_reading(account_id, sensor_id, 24.0, 78, DateTime.now.prev_day.to_time)
+  put_sensor_reading(account_id, sensor_id, 22.0, 56)
 end
 
 Given(/^there are multiple readings for the previous month with account "([^"]*)" and sensor "([^"]*)"$/) do |account_id, sensor_id|
-  put_sensor_reading(account_id, sensor_id, 24.0, 78, DateTime.now.prev_month.prev_day)
-  put_sensor_reading(account_id, sensor_id, 22.0, 81, DateTime.now.prev_month)
+  put_sensor_reading(account_id, sensor_id, 24.0, 78, DateTime.now.prev_month.prev_day.to_time)
+  put_sensor_reading(account_id, sensor_id, 22.0, 81, DateTime.now.prev_month.to_time)
 end
 
 When(/^I query for sensor readings without time ranges for account "(.*)" and sensor "([^"]*)"$/) do |account_id, sensor_id|

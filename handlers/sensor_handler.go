@@ -7,21 +7,21 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/mholt/binding"
-	"github.com/urlgrey/streammarker-data-access/dao"
+	"github.com/urlgrey/streammarker-data-access/db"
 )
 
 // SensorHandler instance
 type SensorHandler struct {
-	database *dao.Database
+	database db.DeviceManager
 }
 
 // NewSensorHandler creates a new SensorHandler
-func NewSensorHandler(database *dao.Database) *SensorHandler {
+func NewSensorHandler(database db.DeviceManager) *SensorHandler {
 	return &SensorHandler{database}
 }
 
 // InitializeRouterForSensorHandler initializes the handler on the given router
-func InitializeRouterForSensorHandler(r *mux.Router, database *dao.Database) {
+func InitializeRouterForSensorHandler(r *mux.Router, database db.DeviceManager) {
 	m := NewSensorHandler(database)
 	r.HandleFunc("/data-access/v1/sensor/{sensor_id}", m.GetSensor).Methods("GET")
 	r.HandleFunc("/data-access/v1/sensor/{sensor_id}", m.UpdateSensor).Methods("PUT")
@@ -46,7 +46,7 @@ func (m *SensorHandler) GetSensor(resp http.ResponseWriter, req *http.Request) {
 // UpdateSensor updates a sensor record in the database
 func (m *SensorHandler) UpdateSensor(resp http.ResponseWriter, req *http.Request) {
 	// bind the request to a sensor model
-	sensorUpdates := new(dao.Sensor)
+	sensorUpdates := new(db.Sensor)
 	errs := binding.Bind(req, sensorUpdates)
 	if errs.Handle(resp) {
 		log.Printf("Error while binding request to model: %s", errs.Error())

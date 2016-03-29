@@ -1,9 +1,10 @@
 package main // import "github.com/urlgrey/streammarker-data-access"
 
 import (
+	"fmt"
 	"os"
 
-	"github.com/urlgrey/streammarker-data-access/dao"
+	"github.com/urlgrey/streammarker-data-access/db"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -13,6 +14,12 @@ import (
 	"github.com/phyber/negroni-gzip/gzip"
 	"github.com/urlgrey/streammarker-data-access/geo"
 	"github.com/urlgrey/streammarker-data-access/handlers"
+)
+
+const (
+	defaultInfluxDBUsername = "streammarker"
+	defaultInfluxDBAddress  = "http://127.0.0.1:8086"
+	defaultInfluxDBName     = "streammarker_measurements"
 )
 
 func main() {
@@ -31,12 +38,17 @@ func main() {
 	dynamoDBConnection := createDynamoDBConnection(s)
 	geoLookup := geo.NewGoogleGeoLookup(os.Getenv("GOOGLE_API_KEY"))
 	geoLookup.Initialize()
-	db := dao.NewDatabase(dynamoDBConnection, geoLookup)
+	deviceDatabase := db.NewDeviceDatabase(dynamoDBConnection, geoLookup)
+	measurementsDatabase, err := createMeasurementsDatabaseConnection(deviceDatabase)
+	if err != nil {
+		fmt.Printf("Error connecting to InfluxDB: %s\n", err.Error())
+		return
+	}
 
 	// Initialize HTTP service handlers
 	router := mux.NewRouter()
-	handlers.InitializeRouterForSensorsDataRetrieval(router, db)
-	handlers.InitializeRouterForSensorHandler(router, db)
+	handlers.InitializeRouterForSensorsDataRetrieval(router, deviceDatabase, measurementsDatabase)
+	handlers.InitializeRouterForSensorHandler(router, deviceDatabase)
 	mainServer.UseHandler(router)
 	go mainServer.Run(":3000")
 
@@ -55,4 +67,22 @@ func createDynamoDBConnection(s *session.Session) *dynamodb.DynamoDB {
 	}
 
 	return dynamodb.New(s, config)
+}
+
+func createMeasurementsDatabaseConnection(deviceManager db.DeviceManager) (db.MeasurementsDatabase, error) {
+	influxDBUsername := os.Getenv("STREAMMARKER_INFLUXDB_USERNAME")
+	if influxDBUsername == "" {
+		influxDBUsername = defaultInfluxDBUsername
+	}
+	influxDBPassword := os.Getenv("STREAMMARKER_INFLUXDB_PASSWORD")
+	influxDBAddress := os.Getenv("STREAMMARKER_INFLUXDB_ADDRESS")
+	if influxDBAddress == "" {
+		influxDBAddress = defaultInfluxDBAddress
+	}
+
+	influxDBName := os.Getenv("STREAMMARKER_INFLUXDB_NAME")
+	if influxDBName == "" {
+		influxDBName = defaultInfluxDBName
+	}
+	return db.NewInfluxDAO(influxDBAddress, influxDBUsername, influxDBPassword, influxDBName, deviceManager)
 }
