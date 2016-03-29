@@ -6,7 +6,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/influxdata/influxdb/client/v2"
 	"github.com/influxdata/influxdb/models"
 )
@@ -113,8 +112,7 @@ func (i *InfluxDAO) GetLastSensorReadings(accountID string, state string) (*Late
 func (i *InfluxDAO) QueryForSensorReadings(accountID, sensorID string, startTime, endTime int64) (*QueryForSensorReadingsResults, error) {
 	results := &QueryForSensorReadingsResults{accountID, sensorID, make([]*MinimalReading, 0)}
 
-	res, err := i.queryDB(fmt.Sprintf("SELECT * from %s where sensor_id = '%s' and account_id = '%s' and timestamp >= '%s' and timestamp <= '%s' order by time desc", sensorMeasurementsTableName, sensorID, accountID, time.Unix(startTime, 0).Format(time.RFC3339), time.Unix(endTime, 0).Format(time.RFC3339)))
-	spew.Dump(err)
+	res, err := i.queryDB(fmt.Sprintf("SELECT * from %s where sensor_id = '%s' and account_id = '%s' and time >= '%s' and time <= '%s' order by time desc", sensorMeasurementsTableName, sensorID, accountID, time.Unix(startTime, 0).Format(time.RFC3339), time.Unix(endTime, 0).Format(time.RFC3339)))
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +120,6 @@ func (i *InfluxDAO) QueryForSensorReadings(accountID, sensorID string, startTime
 		return results, nil
 	}
 
-	spew.Dump(res)
 	row := res[0].Series[0]
 
 	for _, rowValues := range row.Values {
