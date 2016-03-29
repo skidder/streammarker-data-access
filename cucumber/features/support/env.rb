@@ -9,6 +9,7 @@ require 'aws-sdk-v1'
 require 'aws-sdk'
 require 'json'
 require 'time'
+require 'influxdb'
 
 require_relative 'feature_helper'
 
@@ -88,6 +89,14 @@ def startup
   @fakedynamo_process.io.stderr = @fakedynamo_process.io.stdout
   @fakedynamo_process.leader = true
   @fakedynamo_process.start
+
+  # Again, give dynamodb a second to start before we try to use it.
+  sleep(1)
+
+  @influxdb_process = ChildProcess.build('influxd')
+  @influxdb_process.io.stdout = File.new(LOG_DIR + '/influxdb.log', 'w')
+  @influxdb_process.io.stderr = @influxdb_process.io.stdout
+  @influxdb_process.start
 
   # Again, give dynamodb a second to start before we try to use it.
   sleep(1)
@@ -174,6 +183,7 @@ end
 
 def shutdown
   @app_process.stop
+  @influxdb_process.stop
   @fakedynamo_process.stop
 end
 

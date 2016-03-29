@@ -8,22 +8,23 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/urlgrey/streammarker-data-access/dao"
+	"github.com/urlgrey/streammarker-data-access/db"
 )
 
 // SensorReadingsHandler instance for retrieving readings
 type SensorReadingsHandler struct {
-	database *dao.Database
+	deviceManager        db.DeviceManager
+	measurementsDatabase db.MeasurementsDatabase
 }
 
 // NewSensorReadingsHandler creates a new SensorReadingsHandler
-func NewSensorReadingsHandler(database *dao.Database) *SensorReadingsHandler {
-	return &SensorReadingsHandler{database}
+func NewSensorReadingsHandler(deviceManager db.DeviceManager, measurementsDatabase db.MeasurementsDatabase) *SensorReadingsHandler {
+	return &SensorReadingsHandler{deviceManager, measurementsDatabase}
 }
 
 // InitializeRouterForSensorsDataRetrieval creates a SensorReadingsHandler on the given router
-func InitializeRouterForSensorsDataRetrieval(r *mux.Router, database *dao.Database) {
-	m := NewSensorReadingsHandler(database)
+func InitializeRouterForSensorsDataRetrieval(r *mux.Router, deviceManager db.DeviceManager, measurementsDatabase db.MeasurementsDatabase) {
+	m := NewSensorReadingsHandler(deviceManager, measurementsDatabase)
 	r.HandleFunc("/data-access/v1/sensors/account/{account_id}", m.GetSensors).Methods("GET")
 	r.HandleFunc("/data-access/v1/last_sensor_readings/account/{account_id}", m.GetLastSensorReadings).Methods("GET")
 	r.HandleFunc("/data-access/v1/sensor_readings", m.QueryForSensorReadings).Methods("GET")
@@ -35,7 +36,7 @@ func (m *SensorReadingsHandler) GetSensors(resp http.ResponseWriter, req *http.R
 	state := q.Get("state")
 
 	accountID := mux.Vars(req)["account_id"]
-	if sensors, err := m.database.GetSensors(accountID, state); err == nil {
+	if sensors, err := m.deviceManager.GetSensors(accountID, state); err == nil {
 		resp.Header().Set("Content-Type", "application/json")
 		resp.WriteHeader(http.StatusOK)
 		responseEncoder := json.NewEncoder(resp)
@@ -54,7 +55,7 @@ func (m *SensorReadingsHandler) GetLastSensorReadings(resp http.ResponseWriter, 
 	state := q.Get("state")
 
 	accountID := mux.Vars(req)["account_id"]
-	if sensors, err := m.database.GetLastSensorReadings(accountID, state); err == nil {
+	if sensors, err := m.measurementsDatabase.GetLastSensorReadings(accountID, state); err == nil {
 		resp.Header().Set("Content-Type", "application/json")
 		resp.WriteHeader(http.StatusOK)
 		responseEncoder := json.NewEncoder(resp)
@@ -93,7 +94,7 @@ func (m *SensorReadingsHandler) QueryForSensorReadings(resp http.ResponseWriter,
 	} else {
 		endTime = time.Now().Unix()
 	}
-	if sensorReadings, err := m.database.QueryForSensorReadings(accountID, sensorID, startTime, endTime); err == nil {
+	if sensorReadings, err := m.measurementsDatabase.QueryForSensorReadings(accountID, sensorID, startTime, endTime); err == nil {
 		resp.Header().Set("Content-Type", "application/json")
 		resp.WriteHeader(http.StatusOK)
 		responseEncoder := json.NewEncoder(resp)
@@ -108,5 +109,5 @@ func (m *SensorReadingsHandler) QueryForSensorReadings(resp http.ResponseWriter,
 
 // GetSensorsResponse has a set of sensors
 type GetSensorsResponse struct {
-	Sensors []*dao.Sensor `json:"sensors"`
+	Sensors []*db.Sensor `json:"sensors"`
 }

@@ -1,11 +1,8 @@
-package dao
+package db
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
 	"strconv"
-	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -23,63 +20,26 @@ var (
 )
 
 // Database can be used to read and write sensor & relay data
-type Database struct {
+type deviceDatabase struct {
 	dynamoDBService *dynamodb.DynamoDB
 	geoLookup       *geo.GoogleGeoLookup
 }
 
-// NewDatabase constructs a new Database instance
-func NewDatabase(dynamoDBService *dynamodb.DynamoDB, geoLookup *geo.GoogleGeoLookup) *Database {
-	return &Database{dynamoDBService: dynamoDBService, geoLookup: geoLookup}
+// DeviceManager provides functions for updating and retrieving sensor and relay devices
+type DeviceManager interface {
+	GetRelay(string) (*Relay, error)
+	GetSensor(string) (*Sensor, error)
+	GetSensors(string, string) ([]*Sensor, error)
+	UpdateSensor(string, *Sensor) (*Sensor, error)
 }
 
-// GetTableWaitTime returns table wait time
-func (d *Database) GetTableWaitTime() time.Duration {
-	var waitTime string
-	if waitTime = os.Getenv("STREAMMARKER_DYNAMO_WAIT_TIME"); waitTime == "" {
-		waitTime = "30s"
-	}
-
-	t, err := time.ParseDuration(waitTime)
-	if err != nil {
-		return 30 * time.Second
-	}
-	return t
-}
-
-// GetAccount returns account record for given account ID
-func (d *Database) GetAccount(accountID string) (*Account, error) {
-	params := &dynamodb.GetItemInput{
-		Key: map[string]*dynamodb.AttributeValue{
-			"id": {
-				S: aws.String(accountID),
-			},
-		},
-		TableName: aws.String("accounts"),
-		AttributesToGet: []*string{
-			aws.String("name"),
-			aws.String("state"),
-		},
-		ConsistentRead: aws.Bool(true),
-	}
-
-	resp, err := d.dynamoDBService.GetItem(params)
-	if err == nil {
-		if resp.Item != nil {
-			account := &Account{
-				ID:    accountID,
-				Name:  *resp.Item["name"].S,
-				State: *resp.Item["state"].S,
-			}
-			return account, nil
-		}
-		return nil, fmt.Errorf("Account not found: %s", accountID)
-	}
-	return nil, err
+// NewDeviceDatabase constructs a new Database instance
+func NewDeviceDatabase(dynamoDBService *dynamodb.DynamoDB, geoLookup *geo.GoogleGeoLookup) DeviceManager {
+	return &deviceDatabase{dynamoDBService: dynamoDBService, geoLookup: geoLookup}
 }
 
 // GetRelay returns relay record for given ID
-func (d *Database) GetRelay(relayID string) (*Relay, error) {
+func (d *deviceDatabase) GetRelay(relayID string) (*Relay, error) {
 	params := &dynamodb.GetItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
 			"id": {
@@ -112,7 +72,7 @@ func (d *Database) GetRelay(relayID string) (*Relay, error) {
 }
 
 // UpdateSensor updates sensor database record
-func (d *Database) UpdateSensor(sensorID string, sensorUpdates *Sensor) (*Sensor, error) {
+func (d *deviceDatabase) UpdateSensor(sensorID string, sensorUpdates *Sensor) (*Sensor, error) {
 	params := &dynamodb.UpdateItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
 			"id": {
@@ -168,7 +128,7 @@ func (d *Database) UpdateSensor(sensorID string, sensorUpdates *Sensor) (*Sensor
 }
 
 // GetSensor returns sensor record for the given sensor ID
-func (d *Database) GetSensor(sensorID string) (*Sensor, error) {
+func (d *deviceDatabase) GetSensor(sensorID string) (*Sensor, error) {
 	params := &dynamodb.GetItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
 			"id": {
@@ -222,7 +182,7 @@ func (d *Database) GetSensor(sensorID string) (*Sensor, error) {
 }
 
 // GetSensors returns sensors for an account in a given state
-func (d *Database) GetSensors(accountID string, state string) ([]*Sensor, error) {
+func (d *deviceDatabase) GetSensors(accountID string, state string) ([]*Sensor, error) {
 	params := &dynamodb.QueryInput{
 		TableName: aws.String("sensors"),
 		Select:    aws.String("ALL_PROJECTED_ATTRIBUTES"),
@@ -272,124 +232,6 @@ func (d *Database) GetSensors(accountID string, state string) ([]*Sensor, error)
 	return nil, err
 }
 
-// GetLastSensorReadings returns the latest sensor readings for the given account
-func (d *Database) GetLastSensorReadings(accountID string, state string) (*LatestSensorReadings, error) {
-	var sensors []*Sensor
-	var err error
-	if sensors, err = d.GetSensors(accountID, state); err != nil {
-		return nil, err
-	}
-
-	latestReadings := &LatestSensorReadings{make(map[string]*SensorReading)}
-	currentTime := time.Now()
-	sensorReadingsTableName := fmt.Sprintf("sensor_readings_%s", currentTime.Format(tableTimestampFormat))
-	for _, sensor := range sensors {
-		params := &dynamodb.QueryInput{
-			TableName:        aws.String(sensorReadingsTableName),
-			Select:           aws.String("ALL_ATTRIBUTES"),
-			ScanIndexForward: aws.Bool(false),
-			KeyConditions: map[string]*dynamodb.Condition{
-				"id": {
-					ComparisonOperator: aws.String("EQ"),
-					AttributeValueList: []*dynamodb.AttributeValue{
-						{
-							S: aws.String(fmt.Sprintf("%s:%s", sensor.AccountID, sensor.ID)),
-						},
-					},
-				},
-			},
-			Limit: aws.Int64(1),
-		}
-
-		reading := &SensorReading{
-			SensorID:  sensor.ID,
-			AccountID: sensor.AccountID,
-			Name:      sensor.Name,
-			State:     sensor.State,
-		}
-		var resp *dynamodb.QueryOutput
-		resp, _ = d.dynamoDBService.Query(params)
-		for _, sensorRecord := range resp.Items {
-			var measurements []Measurement
-			if err = json.Unmarshal([]byte(*sensorRecord["measurements"].S), &measurements); err != nil {
-				return nil, err
-			}
-			reading.Measurements = measurements
-			timestamp, _ := strconv.ParseInt(*sensorRecord["timestamp"].N, 10, 32)
-			reading.Timestamp = int32(timestamp)
-		}
-		latestReadings.Sensors[reading.SensorID] = reading
-	}
-
-	return latestReadings, err
-}
-
-// QueryForSensorReadings returns sensor readings within an account
-func (d *Database) QueryForSensorReadings(accountID, sensorID string, startTime, endTime int64) (*QueryForSensorReadingsResults, error) {
-	endTimeString := strconv.FormatInt(endTime, 10)
-	var err error
-
-	results := &QueryForSensorReadingsResults{accountID, sensorID, make([]*MinimalReading, 0)}
-	endTimeTS := time.Unix(endTime, 0)
-	for i := 0; i < 3; i++ {
-		monthReadings := []*MinimalReading{}
-		startTimeTS := time.Unix(startTime, 0)
-		startTimeTS = startTimeTS.AddDate(0, i, 0)
-		if i > 0 {
-			startTimeTS = time.Date(startTimeTS.Year(), startTimeTS.Month(), 1, 0, 0, 0, 0, startTimeTS.Location())
-		}
-		if endTimeTS.Before(startTimeTS) {
-			break
-		}
-
-		startTimeString := strconv.FormatInt(startTimeTS.Unix(), 10)
-		sensorReadingsTableName := fmt.Sprintf("sensor_readings_%s", startTimeTS.Format(tableTimestampFormat))
-		params := &dynamodb.QueryInput{
-			TableName:        aws.String(sensorReadingsTableName),
-			Select:           aws.String("ALL_ATTRIBUTES"),
-			ScanIndexForward: aws.Bool(false),
-			Limit:            aws.Int64(10000),
-			KeyConditions: map[string]*dynamodb.Condition{
-				"id": {
-					ComparisonOperator: aws.String("EQ"),
-					AttributeValueList: []*dynamodb.AttributeValue{
-						{
-							S: aws.String(fmt.Sprintf("%s:%s", accountID, sensorID)),
-						},
-					},
-				},
-				"timestamp": {
-					ComparisonOperator: aws.String("BETWEEN"),
-					AttributeValueList: []*dynamodb.AttributeValue{
-						{
-							N: &startTimeString,
-						},
-						{
-							N: &endTimeString,
-						},
-					},
-				},
-			},
-		}
-
-		var resp *dynamodb.QueryOutput
-		if resp, err = d.dynamoDBService.Query(params); err == nil {
-			for _, sensorRecord := range resp.Items {
-				var measurements []Measurement
-				if err = json.Unmarshal([]byte(*sensorRecord["measurements"].S), &measurements); err != nil {
-					return nil, err
-				}
-				timestamp, _ := strconv.ParseInt(*sensorRecord["timestamp"].N, 10, 32)
-				minimalReading := &MinimalReading{int32(timestamp), measurements}
-				monthReadings = append(monthReadings, minimalReading)
-			}
-		}
-		err = nil
-		results.Readings = append(monthReadings, results.Readings...)
-	}
-	return results, err
-}
-
 // Relay has details for a StreamMarker relay
 type Relay struct {
 	ID        string `json:"id"`
@@ -407,7 +249,7 @@ type QueryForSensorReadingsResults struct {
 
 // MinimalReading represents a single reading
 type MinimalReading struct {
-	Timestamp    int32         `json:"timestamp"`
+	Timestamp    int64         `json:"timestamp"`
 	Measurements []Measurement `json:"measurements"`
 }
 
@@ -422,7 +264,7 @@ type SensorReading struct {
 	AccountID    string        `json:"account_id"`
 	Name         string        `json:"name"`
 	State        string        `json:"state"`
-	Timestamp    int32         `json:"timestamp"`
+	Timestamp    int64         `json:"timestamp"`
 	Measurements []Measurement `json:"measurements"`
 }
 

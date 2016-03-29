@@ -1,5 +1,5 @@
-hash: dce9cf95aabfd3a869304c4ff457da2514f770b2a9d40394e91a88e5e5cda98f
-updated: 2016-03-25T08:21:22.753199317-07:00
+hash: 5c1d8bacd802c6e88432e87c3a71c24b05dd68bb260506f5767fccdf0106cf49
+updated: 2016-03-29T06:24:34.479286058-10:00
 imports:
 - name: github.com/aws/aws-sdk-go
   version: 4f9a300f2af32035b3ae8bd0ce9b0fe8412df743
@@ -12,27 +12,43 @@ imports:
   - internal/signer/v4
   - service/dynamodb
   - aws/awserr
+  - aws/session
+  - aws/credentials
+  - aws/client
+  - aws/corehandlers
+  - aws/defaults
+  - aws/request
+  - private/endpoints
+  - aws/awsutil
+  - aws/client/metadata
+  - private/protocol/jsonrpc
+  - private/signer/v4
+  - private/waiter
+  - aws/credentials/ec2rolecreds
+  - aws/ec2metadata
+  - private/protocol/json/jsonutil
+  - private/protocol/rest
 - name: github.com/codegangsta/negroni
   version: c7477ad8e330bef55bf1ebe300cf8aa67c492d1b
+- name: github.com/davecgh/go-spew
+  version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
+  subpackages:
+  - spew
 - name: github.com/go-ini/ini
   version: 12f418cc7edc5a618a51407b7ac1f1f512139df3
 - name: github.com/gorilla/context
   version: 215affda49addc4c8ef7e2534915df2c8c35c6cd
 - name: github.com/gorilla/mux
   version: 8096f47503459bcc74d1f4c487b7e6e42e5746b5
+- name: github.com/influxdata/influxdb
+  version: 3d544a9136386beeef35e09990856a7537653421
+  subpackages:
+  - client
+  - client/v2
+  - models
+  - pkg/escape
 - name: github.com/jmespath/go-jmespath
   version: 0b12d6b521d83fc7f755e7cfc1b1fbdd35a01a74
-- name: github.com/kr/pretty
-  version: e6ac2fc51e89a3249e82157fa0bb7a18ef9dd5bb
-  repo: https://github.com/kr/pretty
-- name: github.com/kr/pty
-  version: f7ee69f31298ecbe5d2b349c711e2547a617d398
-  repo: https://github.com/kr/pty
-- name: github.com/kr/text
-  version: bb797dc4fb8320488f47bf11de07a733d7233e1f
-  repo: https://github.com/kr/text
-- name: github.com/lsegal/gucumber
-  version: 44a4d7eb3b14a88cf82b073dfb7e06277afdc549
 - name: github.com/mholt/binding
   version: 6c082304f300fc70793cb0be18af0fdd4acd2b75
 - name: github.com/patrickmn/go-cache
@@ -40,31 +56,20 @@ imports:
 - name: github.com/phyber/negroni-gzip
   version: 1211b7a0892223f5b3f1af8629ea6c3d9f984028
   subpackages:
-  - /gzip
-- name: github.com/shiena/ansicolor
-  version: a422bbe96644373c5753384a59d678f7d261ff10
-- name: github.com/stretchr/objx
-  version: 1a9d0bb9f541897e62256577b352fdbc1fb4fd94
+  - gzip
 - name: github.com/stretchr/testify
   version: e22aedd37671fb115be6c0c25129c405cb575cfd
   subpackages:
   - assert
 - name: github.com/vaughan0/go-ini
   version: a98ad7ee00ec53921f08832bc06ecf7fd600e6a1
-- name: golang.org/x/crypto
-  version: c197bcf24cde29d3f73c7b4ac6fd41f4384e8af6
-  repo: https://golang.org/x/crypto
 - name: golang.org/x/net
   version: 195180cfebf7362bd243a52477697895128c8777
   subpackages:
   - context
-- name: golang.org/x/text
-  version: 1b466db55e0ba5d56ef5315c728216b42f796491
-  repo: https://golang.org/x/text
-- name: golang.org/x/tools
-  version: 824b504fc734b5a1937a7860175838a86642481f
+  - context/ctxhttp
 - name: googlemaps.github.io/maps
   version: ffa94b00e6641420bd770b494aa03244bb0bad2e
-- name: googlemaps.github.io/maps/internal
-  version: ffa94b00e6641420bd770b494aa03244bb0bad2e
+  subpackages:
+  - internal
 devImports: []

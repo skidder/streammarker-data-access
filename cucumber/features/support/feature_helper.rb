@@ -66,18 +66,24 @@ def hourly_floor(t)
 end
 
 def put_sensor_reading(account_id, sensor_id, temperature, humidity, timestamp = Time.now)
-  ddb = get_dynamo_client
-  ddb.put_item(table_name: "sensor_readings_#{timestamp.strftime('%Y-%m')}",
-             item: {
-               "id" => "#{account_id}:#{sensor_id}",
-               "sensor_id" => sensor_id,
-               "account_id" => account_id,
-               "name" => "Sensor",
-               "state" => "active",
-               "timestamp" => timestamp.strftime("%s").to_i,
-               "measurements" => "[{\"name\":\"temperature\", \"value\": #{temperature}, \"unit\": \"Celsius\"}, {\"name\":\"humidity\", \"value\": #{humidity}, \"unit\": \"%\"}]",
-              }
-            )
+  data = {
+    values: {
+      temperature: temperature,
+      humidity: humidity,
+    },
+    tags: {
+      account_id: account_id,
+      sensor_id: sensor_id,
+    },
+    timestamp: timestamp.to_i,
+  }
+
+  get_influxdb_client.write_point("sensor_measurements", data, 's')
+end
+
+def sensor_readings_table_exists?
+  results = get_influxdb_client.query "select count(value) from sensor_measurements"
+  return (results != nil && results.length > 0)
 end
 
 def create_sensor_readings_table(timestamp)
@@ -142,10 +148,21 @@ def delete_hourly_sensor_readings_table(timestamp)
   ddb.delete_table(table_name: "hourly_sensor_readings_#{timestamp.strftime('%Y-%m')}")
 end
 
+def silently_delete_influxdb_data(table_name)
+  begin
+    get_influxdb_client.query "drop series from #{table_name}"
+  rescue
+  end
+end
+
 def get_dynamo_client
   Aws::DynamoDB::Client.new(
     access_key_id: 'x',
     secret_access_key: 'y',
     endpoint: ENV['STREAMMARKER_DYNAMO_ENDPOINT']
   )
+end
+
+def get_influxdb_client
+  InfluxDB::Client.new('streammarker_measurements')   
 end
