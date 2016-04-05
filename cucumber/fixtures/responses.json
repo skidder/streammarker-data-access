@@ -44,6 +44,57 @@
       }
     }
   },
+  "query_for_readings_last_1_month": {
+    "sensor_id": "1",
+    "account_id": "account1",
+    "readings": [
+      {
+        "timestamp": 1444324049,
+        "measurements": [
+          {
+            "unit": "%",
+            "name": "humidity",
+            "value": 56
+          },
+          {
+            "unit": "Celsius",
+            "name": "temperature",
+            "value": 22
+          }
+        ]
+      },
+      {
+        "timestamp": 1444237649,
+        "measurements": [
+          {
+            "unit": "%",
+            "name": "humidity",
+            "value": 78
+          },
+          {
+            "unit": "Celsius",
+            "name": "temperature",
+            "value": 24
+          }
+        ]
+      },
+      {
+        "timestamp": 1447002449,
+        "measurements": [
+          {
+            "unit": "%",
+            "name": "humidity",
+            "value": 81
+          },
+          {
+            "unit": "Celsius",
+            "name": "temperature",
+            "value": 22
+          }
+        ]
+      }
+    ]
+  },
   "query_for_readings_last_2_months": {
     "sensor_id": "1",
     "account_id": "account1",

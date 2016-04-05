@@ -29,6 +29,16 @@ Feature: Sensor Readings API
     And the response is GZIP-compressed
 
   @happy
+  Scenario: Query for readings in the current month with several months of data
+    Given I have one sensor "1" in the database for account "account1"
+    And there are multiple readings for the current month with account "account1" and sensor "1"
+    And there are multiple readings for the previous month with account "account1" and sensor "1"
+    When I query for readings from 1 months ago for account "account1" and sensor "1"
+    Then the result should be a 200
+    And the response should be equal to "query_for_readings_last_1_month"
+    And the response is GZIP-compressed
+
+  @happy
   Scenario: Query for readings over last two months with readings only in previous month
     Given I have one sensor "1" in the database for account "account1"
     And there are multiple readings for the previous month with account "account1" and sensor "1"
