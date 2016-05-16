@@ -7,7 +7,7 @@ build:
     - script:
         name: Copy source to GOPATH
         code: |
-          mkdir ${GOPATH}/src/github.com/skidder/streammarker-data-access
+          mkdir -p ${GOPATH}/src/github.com/skidder/streammarker-data-access
           cp -R . ${GOPATH}/src/github.com/skidder/streammarker-data-access
 
     - script:
