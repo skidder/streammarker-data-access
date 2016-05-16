@@ -10,6 +10,7 @@ build:
           curl -LO https://github.com/Masterminds/glide/releases/download/${GLIDE_VERSION}/glide-${GLIDE_VERSION}-linux-amd64.tar.gz
           tar -xvzf glide-${GLIDE_VERSION}-linux-amd64.tar.gz
           ./linux-amd64/glide install
+          export GOPATH=${WERCKER_STEP_ROOT}/vendor
 
     - golint:
         exclude: vendor
@@ -18,3 +19,8 @@ build:
         name: go build
         code: |
           go build
+
+    - script:
+        name: go test
+        code: |
+          make test
