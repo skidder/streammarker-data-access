@@ -5,11 +5,11 @@ build:
     - skidder/glide-install@1.0.1
   
     - script:
-        name: go build
+        name: build
         code: |
-          go build
+          make build
 
     - script:
-        name: go test
+        name: test
         code: |
           make test
