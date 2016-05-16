@@ -2,7 +2,7 @@ box: golang
 build:
   # The steps that will be executed on build
   steps:
-    - skidder/glide-install@1.0.1
+    - skidder/glide-install@1.0.2
   
     - script:
         name: configure Go
