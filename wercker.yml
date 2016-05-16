@@ -11,9 +11,11 @@ build:
     - script:
         name: build
         code: |
+          export GOPATH=.:${GOPATH}
           make build
 
     - script:
         name: test
         code: |
+          export GOPATH=.:${GOPATH}
           make test
