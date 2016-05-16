@@ -17,9 +17,4 @@ build:
     - script:
         name: go build
         code: |
-          make build
-
-    - script:
-        name: go test
-        code: |
-          make test
+          go build
