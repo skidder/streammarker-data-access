@@ -8,7 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/mholt/binding"
 
-	"github.com/urlgrey/streammarker-data-access/geo"
+	"github.com/skidder/streammarker-data-access/geo"
 )
 
 const (

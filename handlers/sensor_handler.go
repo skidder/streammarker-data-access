@@ -7,7 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/mholt/binding"
-	"github.com/urlgrey/streammarker-data-access/db"
+	"github.com/skidder/streammarker-data-access/db"
 )
 
 // SensorHandler instance

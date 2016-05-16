@@ -1,10 +1,10 @@
-package main // import "github.com/urlgrey/streammarker-data-access"
+package main // import "github.com/skidder/streammarker-data-access"
 
 import (
 	"fmt"
 	"os"
 
-	"github.com/urlgrey/streammarker-data-access/db"
+	"github.com/skidder/streammarker-data-access/db"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -12,8 +12,8 @@ import (
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/phyber/negroni-gzip/gzip"
-	"github.com/urlgrey/streammarker-data-access/geo"
-	"github.com/urlgrey/streammarker-data-access/handlers"
+	"github.com/skidder/streammarker-data-access/geo"
+	"github.com/skidder/streammarker-data-access/handlers"
 )
 
 const (

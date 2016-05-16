@@ -2,4 +2,4 @@
 
 # Deploy image to Docker Hub
 docker login -e ${DOCKER_EMAIL} -u ${DOCKER_USER} -p ${DOCKER_PASS} && \
-docker push urlgrey/streammarker-data-access:latest
+docker push skidder/streammarker-data-access:latest

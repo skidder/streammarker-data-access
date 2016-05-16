@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/urlgrey/streammarker-data-access/db"
+	"github.com/skidder/streammarker-data-access/db"
 )
 
 // SensorReadingsHandler instance for retrieving readings

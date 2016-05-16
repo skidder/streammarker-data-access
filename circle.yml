@@ -7,9 +7,9 @@ machine:
     - 'sudo pip install awscli'
 checkout:
   post:
-    - rm -rf ~/.go_workspace/src/github.com/urlgrey
-    - mkdir -p ~/.go_workspace/src/github.com/urlgrey
-    - cp -R ~/streammarker-data-access ~/.go_workspace/src/github.com/urlgrey/streammarker-data-access
+    - rm -rf ~/.go_workspace/src/github.com/skidder
+    - mkdir -p ~/.go_workspace/src/github.com/skidder
+    - cp -R ~/streammarker-data-access ~/.go_workspace/src/github.com/skidder/streammarker-data-access
 dependencies:
   cache_directories:
     - "~/.rvm/gems"
@@ -22,18 +22,18 @@ dependencies:
     - tar -xzf /tmp/go/glide-0.10.0-linux-amd64.tar.gz -C /tmp/go
     - sudo cp /tmp/go/linux-amd64/glide /usr/local/bin/glide
   override:
-    - cd ~/.go_workspace/src/github.com/urlgrey/streammarker-data-access && glide install
-    # - cd ~/.go_workspace/src/github.com/urlgrey/streammarker-data-access/cucumber && bundle install
+    - cd ~/.go_workspace/src/github.com/skidder/streammarker-data-access && glide install
+    # - cd ~/.go_workspace/src/github.com/skidder/streammarker-data-access/cucumber && bundle install
 test:
   override:
-    - cd ~/.go_workspace/src/github.com/urlgrey/streammarker-data-access && make all
-    # - cd ~/.go_workspace/src/github.com/urlgrey/streammarker-data-access/cucumber && ./test.sh -t ~@broken -t ~@wip -t ~@todo
+    - cd ~/.go_workspace/src/github.com/skidder/streammarker-data-access && make all
+    # - cd ~/.go_workspace/src/github.com/skidder/streammarker-data-access/cucumber && ./test.sh -t ~@broken -t ~@wip -t ~@todo
   post:
-    - cd ~/.go_workspace/src/github.com/urlgrey/streammarker-data-access && make docker-build
-    # - docker run -d -e AWS_REGION=us-east-1 -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -p 3000:3000 -p 3100:3100 urlgrey/streammarker-data-access:latest; sleep 5
+    - cd ~/.go_workspace/src/github.com/skidder/streammarker-data-access && make docker-build
+    # - docker run -d -e AWS_REGION=us-east-1 -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -p 3000:3000 -p 3100:3100 skidder/streammarker-data-access:latest; sleep 5
     # - curl --retry 10 --retry-delay 5 -v http://localhost:3100/healthcheck
 deployment:
   automerge:
     branch: [master]
     commands:
-       - cd ~/.go_workspace/src/github.com/urlgrey/streammarker-data-access && ./deploy.sh $CIRCLE_SHA1
+       - cd ~/.go_workspace/src/github.com/skidder/streammarker-data-access && ./deploy.sh $CIRCLE_SHA1

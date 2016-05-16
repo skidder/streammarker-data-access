@@ -37,8 +37,8 @@ run: build
 
 docker-build:
 	docker info
-	docker build -t urlgrey/streammarker-data-access:latest .
+	docker build -t skidder/streammarker-data-access:latest .
 
 docker-deploy:
 	docker login -e ${DOCKER_EMAIL} -u ${DOCKER_USER} -p ${DOCKER_PASS}
-	docker push urlgrey/streammarker-data-access:latest
+	docker push skidder/streammarker-data-access:latest

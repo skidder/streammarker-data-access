@@ -1,4 +1,4 @@
-package: github.com/urlgrey/streammarker-data-access
+package: github.com/skidder/streammarker-data-access
 import:
 - package: github.com/aws/aws-sdk-go
   version: 4f9a300f2af32035b3ae8bd0ce9b0fe8412df743
