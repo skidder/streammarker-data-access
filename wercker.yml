@@ -9,7 +9,7 @@ build:
           export GLIDE_VERSION=0.10.0
           curl -LO https://github.com/Masterminds/glide/releases/download/${GLIDE_VERSION}/glide-${GLIDE_VERSION}-linux-amd64.tar.gz
           tar -xvzf glide-${GLIDE_VERSION}-linux-amd64.tar.gz
-          ./linux-amd64/glide install --quick
+          ./linux-amd64/glide install
 
     - golint:
         exclude: vendor
