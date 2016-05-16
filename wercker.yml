@@ -5,6 +5,10 @@ build:
     - skidder/glide-install@1.0.1
   
     - script:
+        name: configure Go
+        code: export GO15VENDOREXPERIMENT=1
+
+    - script:
         name: build
         code: |
           make build
