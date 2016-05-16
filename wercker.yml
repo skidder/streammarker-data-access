@@ -2,7 +2,7 @@ box: golang
 build:
   # The steps that will be executed on build
   steps:
-    - skidder/glide-install
+    - skidder/glide-install@1.0.0
   
     - golint:
         exclude: vendor
