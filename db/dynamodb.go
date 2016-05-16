@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"net/http"
 	"strconv"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -304,7 +305,7 @@ type MinMaxMeasurement struct {
 }
 
 // FieldMap binds Sensor value for JSON mapping
-func (s *Sensor) FieldMap() binding.FieldMap {
+func (s *Sensor) FieldMap(req *http.Request) binding.FieldMap {
 	return binding.FieldMap{
 		&s.Name:            "name",
 		&s.State:           "state",

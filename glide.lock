@@ -1,5 +1,5 @@
-hash: 5c1d8bacd802c6e88432e87c3a71c24b05dd68bb260506f5767fccdf0106cf49
-updated: 2016-03-29T06:24:34.479286058-10:00
+hash: 7011e9caaaa2c0b44d2cc79382f14b945e6c90903abb6d3d3475a40ca1a37ed1
+updated: 2016-05-16T16:49:46.733214084-07:00
 imports:
 - name: github.com/aws/aws-sdk-go
   version: 4f9a300f2af32035b3ae8bd0ce9b0fe8412df743
@@ -30,10 +30,6 @@ imports:
   - private/protocol/rest
 - name: github.com/codegangsta/negroni
   version: c7477ad8e330bef55bf1ebe300cf8aa67c492d1b
-- name: github.com/davecgh/go-spew
-  version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
-  subpackages:
-  - spew
 - name: github.com/go-ini/ini
   version: 12f418cc7edc5a618a51407b7ac1f1f512139df3
 - name: github.com/gorilla/context
@@ -50,7 +46,7 @@ imports:
 - name: github.com/jmespath/go-jmespath
   version: 0b12d6b521d83fc7f755e7cfc1b1fbdd35a01a74
 - name: github.com/mholt/binding
-  version: 6c082304f300fc70793cb0be18af0fdd4acd2b75
+  version: 89411c4ffb61f0ebef45d8bdb830103b358ef9fa
 - name: github.com/patrickmn/go-cache
   version: 1881a9bccb818787f68c52bfba648c6cf34c34fa
 - name: github.com/phyber/negroni-gzip
@@ -72,4 +68,6 @@ imports:
   version: ffa94b00e6641420bd770b494aa03244bb0bad2e
   subpackages:
   - internal
+- name: googlemaps.github.io/maps/internal
+  version: ffa94b00e6641420bd770b494aa03244bb0bad2e
 devImports: []
