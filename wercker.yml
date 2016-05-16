@@ -11,11 +11,11 @@ build:
     - script:
         name: build
         code: |
-          export GOPATH=.:${GOPATH}
+          export GOPATH=${WERCKER_STEP_ROOT}:${GOPATH}
           make build
 
     - script:
         name: test
         code: |
-          export GOPATH=.:${GOPATH}
+          export GOPATH=${WERCKER_STEP_ROOT}:${GOPATH}
           make test
