@@ -5,17 +5,17 @@ build:
     - skidder/glide-install@1.0.2
   
     - script:
-        name: configure Go
-        code: export GO15VENDOREXPERIMENT=1
+        name: Copy source to GOPATH
+        code: |
+          mkdir ${GOPATH}/src/github.com/skidder/streammarker-data-access
+          cp -R . ${GOPATH}/src/github.com/skidder/streammarker-data-access
 
     - script:
         name: build
         code: |
-          export GOPATH=${WERCKER_STEP_ROOT}:${GOPATH}
           make build
 
     - script:
         name: test
         code: |
-          export GOPATH=${WERCKER_STEP_ROOT}:${GOPATH}
           make test

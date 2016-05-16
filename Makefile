@@ -7,12 +7,6 @@ clean:
 	if [ -d $(COVERAGEDIR) ]; then rm -rf $(COVERAGEDIR); fi
 	if [ -d bin ]; then rm -rf bin; fi
 
-godep:
-	go get github.com/tools/godep
-
-godep-save:
-	godep save ./...
-
 all: build test
 
 build:
