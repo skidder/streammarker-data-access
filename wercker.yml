@@ -4,9 +4,6 @@ build:
   steps:
     - skidder/glide-install@1.0.1
   
-    - golint:
-        exclude: vendor
-
     - script:
         name: go build
         code: |
