@@ -22,9 +22,10 @@ build:
           make test
 deploy:
   steps:
-    - internal/docker-push:
+    - internal/docker-scratch-push:
         username: $DOCKERHUB_USERNAME
         password: $DOCKERHUB_PASSWORD
         tag: latest
+        ports: "3000, 3100"
         repository: skidder/streammarker-data-access
         registry: https://registry.hub.docker.com
