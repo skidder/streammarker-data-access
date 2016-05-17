@@ -13,6 +13,9 @@ build:
 	if [ ! -d bin ]; then mkdir bin; fi
 	go build -v -o streammarker-data-access
 
+static-build:
+	CGO_ENABLED=0 go build -a -ldflags '-s' -installsuffix cgo -v -o streammarker-data-access
+
 fmt:
 	go fmt ./...
 
