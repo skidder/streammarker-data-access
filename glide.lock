@@ -68,6 +68,4 @@ imports:
   version: ffa94b00e6641420bd770b494aa03244bb0bad2e
   subpackages:
   - internal
-- name: googlemaps.github.io/maps/internal
-  version: ffa94b00e6641420bd770b494aa03244bb0bad2e
 devImports: []
