@@ -27,5 +27,6 @@ deploy:
         password: $DOCKERHUB_PASSWORD
         tag: latest
         ports: "3000, 3100"
+        cmd: ./streammarker-data-access
         repository: skidder/streammarker-data-access
         registry: https://registry.hub.docker.com

@@ -7,9 +7,9 @@
 _obj
 _test
 coverage
-bin
 vendor
 cucumber/.bundle/
+streammarker-data-access
 
 # Architecture specific extensions/prefixes
 *.[568vq]

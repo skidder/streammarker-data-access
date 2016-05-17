@@ -5,13 +5,13 @@ all: clean build test cover
 
 clean: 
 	if [ -d $(COVERAGEDIR) ]; then rm -rf $(COVERAGEDIR); fi
-	if [ -d bin ]; then rm -rf bin; fi
+	if [ -d streammarker-data-access ]; then rm -f streammarker-data-access; fi
 
 all: build test
 
 build:
 	if [ ! -d bin ]; then mkdir bin; fi
-	go build -v -o bin/streammarker-data-access
+	go build -v -o streammarker-data-access
 
 fmt:
 	go fmt ./...
